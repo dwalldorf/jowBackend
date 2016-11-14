@@ -1,0 +1,81 @@
+version: '2'
+services:
+  java:
+    build: .
+    ports:
+     - "8080:8080"
+     - "8000:8000"
+     - "5005:5005"
+    links:
+     - redis
+     - mongo
+     - rabbitmq
+    depends_on:
+      - redis
+      - mongo
+    volumes:
+      - demofile-data:/usr/local/ow-backend/data
+  demoparser:
+    build: src/main/resources/docker/demoparser
+    links:
+      - rabbitmq
+    depends_on:
+      - rabbitmq
+    volumes:
+          - demofile-data:/usr/local/ow-backend/data
+
+  redis:
+    build:  src/main/resources/docker/redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/var/lib/redis
+  mongo:
+    build: src/main/resources/docker/mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+  rabbitmq:
+    build: src/main/resources/docker/rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+#  elasticsearch:
+#    build: src/main/resources/docker/elasticsearch/
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
+#    environment:
+#      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+#    networks:
+#      - docker_elk
+#  logstash:
+#    build: src/main/resources/docker/logstash/
+#    command: -f /etc/logstash/conf.d/
+#    volumes:
+#      - ./logstash/config:/etc/logstash/conf.d
+#    ports:
+#      - "5000:5000"
+#    networks:
+#      - docker_elk
+#  kibana:
+#    build: src/main/resources/docker/kibana/
+#    volumes:
+#      - ./kibana/config/:/opt/kibana/config/
+#    ports:
+#      - "5601:5601"
+#    networks:
+#      - docker_elk
+#networks:
+#    docker_elk:
+#      driver: bridge
+
+volumes:
+  redis-data: {}
+  mongo-data: {}
+  rabbitmq-data: {}
+  demofile-data: {}
