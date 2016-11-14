@@ -6,27 +6,34 @@ import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 
 @Configuration
-public class SpringMongoAutoConfiguration extends AbstractMongoConfiguration {
+public class SpringMongoConfiguration extends AbstractMongoConfiguration {
 
-    private final static Logger logger = LoggerFactory.getLogger(SpringMongoAutoConfiguration.class);
+    private final static Logger logger = LoggerFactory.getLogger(SpringMongoConfiguration.class);
 
-    private final static String DB_HOST = "127.0.0.1";
-    private final static String DB_NAME = "owbackend";
+    @Value("${mongo.host}")
+    private String host;
+
+    @Value("${mongo.db}")
+    private String db;
+
+    @Value("${mongo.port}")
+    private int port;
 
     @Override
     protected String getDatabaseName() {
-        return DB_NAME;
+        return db;
     }
 
     @Bean
     @Override
     public Mongo mongo() throws Exception {
-        return new MongoClient(DB_HOST);
+        return new MongoClient(host, port);
     }
 
     @Bean
@@ -38,7 +45,7 @@ public class SpringMongoAutoConfiguration extends AbstractMongoConfiguration {
     public Datastore datastore() throws Exception {
         Morphia morphia = new Morphia();
 
-        Datastore datastore = morphia.createDatastore(mongoClient(), DB_NAME);
+        Datastore datastore = morphia.createDatastore(mongoClient(), db);
         datastore.ensureIndexes();
 
         logger.info("created mongo indexes");

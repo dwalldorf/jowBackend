@@ -1,6 +1,7 @@
 package com.dwalldorf.owbackend.config;
 
 import java.util.Arrays;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +13,13 @@ import org.springframework.web.filter.DelegatingFilterProxy;
 
 @Configuration
 @EnableRedisHttpSession
-public class SessionRepositoryConfig {
+public class SessionRepositoryConfiguration {
+
+    @Value("${redis.host}")
+    private String host;
+
+    @Value("${redis.port}")
+    private int port;
 
     @Bean
     @Order(value = 0)
@@ -24,7 +31,11 @@ public class SessionRepositoryConfig {
     }
 
     @Bean
-    public JedisConnectionFactory connectionFactory() {
-        return new JedisConnectionFactory();
+    public JedisConnectionFactory jedisConnectionFactory() {
+        JedisConnectionFactory factory = new JedisConnectionFactory();
+        factory.setHostName(host);
+        factory.setPort(port);
+
+        return factory;
     }
 }
