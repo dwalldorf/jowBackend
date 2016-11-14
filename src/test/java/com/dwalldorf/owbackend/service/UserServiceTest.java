@@ -9,10 +9,8 @@ import static org.mockito.Mockito.when;
 
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
-import com.dwalldorf.owbackend.util.PasswordUtil;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
-import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -27,7 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
 
-    private final static ObjectId ID = new ObjectId();
+    private final static String ID = "someId";
     private final static String USERNAME = "testUser";
     private final static String EMAIL = "max@mustermann.org";
     private final static Date REGISTRATION = new Date();
@@ -42,7 +40,7 @@ public class UserServiceTest {
     private HttpSession httpSession;
 
     @Spy
-    private PasswordUtil passwordUtil;
+    private PasswordService passwordService;
 
     @InjectMocks
     private UserService userService;
@@ -83,19 +81,19 @@ public class UserServiceTest {
     public void testRegisterHashesCorrectly() {
         User user = createTestUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(passwordUtil.createSalt()).thenReturn(SALT);
+        when(passwordService.createSalt()).thenReturn(SALT);
 
         userService.register(user);
 
-        Mockito.verify(passwordUtil).createSalt();
-        Mockito.verify(passwordUtil).hash(any(), eq(SALT));
+        Mockito.verify(passwordService).createSalt();
+        Mockito.verify(passwordService).hash(any(), eq(SALT));
     }
 
     @Test
     public void testRegisterReturnSecureUserCopy() {
         User user = createTestUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
-        when(passwordUtil.createSalt()).thenReturn(SALT);
+        when(passwordService.createSalt()).thenReturn(SALT);
 
         User registeredUser = userService.register(user);
 

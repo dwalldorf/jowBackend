@@ -1,4 +1,4 @@
-package com.dwalldorf.owbackend.util;
+package com.dwalldorf.owbackend.service;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -10,7 +10,7 @@ import javax.crypto.spec.PBEKeySpec;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PasswordUtil {
+public class PasswordService {
 
     private final static String ALGORITHM = "PBKDF2WithHmacSHA1";
     private final static int ITERATIONS = 10000;
@@ -18,7 +18,7 @@ public class PasswordUtil {
 
     private SecretKeyFactory keyFactory;
 
-    public PasswordUtil() throws NoSuchAlgorithmException {
+    public PasswordService() throws NoSuchAlgorithmException {
         keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
     }
 

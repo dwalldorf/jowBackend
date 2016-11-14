@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Size;
-import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongodb.morphia.annotations.Id;
@@ -17,7 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class User implements Serializable {
 
     @Id
-    private ObjectId id;
+    private String id;
 
     @NotEmpty
     @Size(min = 5, max = 40)
@@ -49,7 +48,7 @@ public class User implements Serializable {
         this.userSettings = new UserSettings();
     }
 
-    public User(ObjectId id, String username, String email, String password, byte[] hashedPassword, byte[] salt, Date registration, UserSettings userSettings) {
+    public User(String id, String username, String email, String password, byte[] hashedPassword, byte[] salt, Date registration, UserSettings userSettings) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -64,11 +63,11 @@ public class User implements Serializable {
         }
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
-    public User setId(ObjectId id) {
+    public User setId(String id) {
         this.id = id;
         return this;
     }

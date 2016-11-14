@@ -3,8 +3,8 @@ package com.dwalldorf.owbackend.rest.controller;
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.model.Demo;
 import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.service.DemoService;
 import com.dwalldorf.owbackend.service.UserService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
@@ -18,12 +18,15 @@ public class DemoController {
     @Inject
     private UserService userService;
 
+    @Inject
+    private DemoService demoService;
+
     @RequireLogin
     @RequestMapping("/demos")
     public ResponseEntity<List<Demo>> getDemosByUser() {
         User currentUser = userService.getCurrentUser();
+        List<Demo> demos = demoService.findByUser(currentUser);
 
-        return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        return new ResponseEntity<>(demos, HttpStatus.OK);
     }
-
 }

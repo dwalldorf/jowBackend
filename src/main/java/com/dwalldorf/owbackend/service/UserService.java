@@ -2,7 +2,6 @@ package com.dwalldorf.owbackend.service;
 
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
-import com.dwalldorf.owbackend.util.PasswordUtil;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,13 +22,13 @@ public class UserService {
     private HttpSession httpSession;
 
     @Inject
-    private PasswordUtil passwordUtil;
+    private PasswordService passwordService;
 
     public User register(User user) {
         user.setRegistration(new Date());
-        user.setSalt(passwordUtil.createSalt());
+        user.setSalt(passwordService.createSalt());
         user.setHashedPassword(
-                passwordUtil.hash(user.getPassword().toCharArray(), user.getSalt())
+                passwordService.hash(user.getPassword().toCharArray(), user.getSalt())
         );
 
         User persistedUser = userRepository.save(user);
@@ -46,7 +45,7 @@ public class UserService {
             return null;
         }
 
-        boolean passwordMatch = passwordUtil.isExpectedPassword(password.toCharArray(), dbUser.getSalt(), dbUser.getHashedPassword());
+        boolean passwordMatch = passwordService.isExpectedPassword(password.toCharArray(), dbUser.getSalt(), dbUser.getHashedPassword());
         if (!passwordMatch) {
             logger.info("Login failed for user '{}'", username);
             return null;
