@@ -7,37 +7,7 @@ import org.mongodb.morphia.annotations.Embedded;
 @Embedded
 public class DemoMatchInfo implements Serializable {
 
-    public enum Map {
-        de_dust2("de_dust2"),
-        DE_COBBLESTONE("de_cobblestone"),
-        DE_CACHE("de_cache"),
-        DE_OVERPASS("de_overpass"),
-        de_mirage("de_mirage"),
-        de_nuke("de_nuke"),
-        DE_TRAIN("de_train"),
-
-        DE_INFERNO("de_info"),
-        DE_DUST("de_dust"),
-        CS_ASSAULT("cs_assault"),
-        CS_MILITIA("cs_militia"),
-        CS_OFFICE("cs_office"),
-        DE_VERTIGO("de_vertigo"),
-        CS_ITALY("cs_italy"),
-        DE_AZTEC("de_aztec");
-
-        private final String name;
-
-        Map(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    private Map map;
+    private CSGOMap map;
 
     private String serverName;
 
@@ -57,16 +27,16 @@ public class DemoMatchInfo implements Serializable {
     @Embedded
     private List<DemoRound> rounds;
 
-    public Map getMap() {
+    public CSGOMap getMap() {
         return map;
     }
 
-    public void setMap(Map map) {
+    public void setMap(CSGOMap map) {
         this.map = map;
     }
 
     public void setMap(String mapName) {
-        this.map = Map.valueOf(mapName);
+        this.map = CSGOMap.valueOf(mapName);
     }
 
     public String getServerName() {

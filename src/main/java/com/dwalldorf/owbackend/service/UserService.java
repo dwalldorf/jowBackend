@@ -39,6 +39,10 @@ public class UserService {
         return userRepository.findByUsernameOrEmail(username, username);
     }
 
+    public User findById(final String userId) {
+        return userRepository.findOne(userId);
+    }
+
     public User login(final String username, final String password) {
         User dbUser = findByUsernameOrEmail(username);
         if (dbUser == null) {
@@ -88,4 +92,5 @@ public class UserService {
     public List<User> getUsers() {
         return userRepository.findAll();
     }
+
 }

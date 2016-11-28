@@ -9,10 +9,12 @@ import java.util.List;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/demos")
 public class DemoController {
 
     @Inject
@@ -21,8 +23,8 @@ public class DemoController {
     @Inject
     private DemoService demoService;
 
+    @GetMapping
     @RequireLogin
-    @RequestMapping("/demos")
     public ResponseEntity<List<Demo>> getDemosByUser() {
         User currentUser = userService.getCurrentUser();
         List<Demo> demos = demoService.findByUser(currentUser);

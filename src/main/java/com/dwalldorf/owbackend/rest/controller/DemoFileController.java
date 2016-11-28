@@ -26,7 +26,6 @@ public class DemoFileController {
 
     @PostMapping
     @RequireLogin
-
     public ResponseEntity<DemoFile> uploadDemoFile(@RequestParam("file") MultipartFile file) throws InvalidInputException {
         DemoFile demoFile = demoFileService.storeDemo(file);
         demoFile = demoFileService.persist(demoFile);

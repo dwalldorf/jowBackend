@@ -1,4 +1,4 @@
-package com.dwalldorf.owbackend.dto;
+package com.dwalldorf.owbackend.rest.dto;
 
 import java.io.Serializable;
 

@@ -8,8 +8,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Profile({"default", "dev"})
 public class RabbitmqDemoFileProducerConfiguration extends RabbitmqConfiguration {
 
     @Value("${amqp.queues.parse}")
