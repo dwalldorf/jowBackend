@@ -1,20 +1,17 @@
-package com.dwalldorf.owbackend.service;
+package com.dwalldorf.owbackend.unit.service;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
 
+import com.dwalldorf.owbackend.service.PasswordService;
+import com.dwalldorf.owbackend.unit.BaseTest;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@RunWith(MockitoJUnitRunner.class)
-@SpringBootTest
-public class PasswordServiceTest {
+public class PasswordServiceTest extends BaseTest {
 
     private final static int ITERATIONS = 100;
 

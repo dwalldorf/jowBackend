@@ -1,4 +1,4 @@
-package com.dwalldorf.owbackend.service;
+package com.dwalldorf.owbackend.unit.service;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
@@ -9,21 +9,19 @@ import static org.mockito.Mockito.when;
 
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
+import com.dwalldorf.owbackend.service.PasswordService;
+import com.dwalldorf.owbackend.service.UserService;
+import com.dwalldorf.owbackend.unit.BaseTest;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-@RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+public class UserServiceTest extends BaseTest {
 
     private final static String ID = "someId";
     private final static String USERNAME = "testUser";
@@ -51,7 +49,7 @@ public class UserServiceTest {
 
     @Test
     public void testGetSecureUserCopy() {
-        User user = createTestUser();
+        User user = createUser();
 
         User secureUserCopy = userService.getSecureUserCopy(user);
 
@@ -67,7 +65,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegisterSetsRegistrationDate() throws Exception {
-        User user = createTestUser();
+        User user = createUser();
         user.setRegistration(null);
         assertNull(user.getRegistration());
 
@@ -79,7 +77,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegisterHashesCorrectly() {
-        User user = createTestUser();
+        User user = createUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(passwordService.createSalt()).thenReturn(SALT);
 
@@ -91,7 +89,7 @@ public class UserServiceTest {
 
     @Test
     public void testRegisterReturnSecureUserCopy() {
-        User user = createTestUser();
+        User user = createUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(passwordService.createSalt()).thenReturn(SALT);
 
@@ -112,13 +110,13 @@ public class UserServiceTest {
 
     @Test
     public void testLoginReturnsNullIfUserFoundButWrongPassword() {
-        when(userRepository.findByUsernameOrEmail(eq(USERNAME), eq(USERNAME))).thenReturn(createTestUser());
+        when(userRepository.findByUsernameOrEmail(eq(USERNAME), eq(USERNAME))).thenReturn(createUser());
 
         User retVal = userService.login(USERNAME, "wrongPassword");
         assertNull(retVal);
     }
 
-    private User createTestUser() {
+    private User createUser() {
         User user = new User();
         user.setId(ID)
             .setUsername(USERNAME)
