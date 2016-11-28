@@ -18,4 +18,7 @@ You can attach your debugger at `localhost:8000`. The application runs with
 `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000`
 
 ### Locally
-You can also run the everything locally by starting the application with `mvn spring-boot:run -Dspring.profiles.active=dev`. This will require a locally running mongodb, redis and rabbitmq. 
+You can also run the everything locally by starting the application with `mvn spring-boot:run -Dspring.profiles.active=dev`. This will require a locally running mongodb, redis and rabbitmq.
+
+## Tests
+Run test with `mvn test` or `mvn integration-test`.
