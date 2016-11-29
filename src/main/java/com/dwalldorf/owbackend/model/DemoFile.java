@@ -22,47 +22,54 @@ public class DemoFile implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
+    public DemoFile setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public DemoFile setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
     public String getFile() {
         return file;
     }
 
-    public void setFile(String file) {
+    public DemoFile setFile(String file) {
         this.file = file;
+        return this;
     }
 
     public boolean isQueued() {
         return queued;
     }
 
-    public void setQueued() {
+    public DemoFile setQueued() {
         setQueued(true);
+        return this;
     }
 
-    public void setQueued(boolean queued) {
+    public DemoFile setQueued(boolean queued) {
         this.queued = queued;
+        return this;
     }
 
     public boolean isProcessed() {
         return processed;
     }
 
-    public void setProcessed() {
+    public DemoFile setProcessed() {
         setProcessed(true);
+        return this;
     }
 
-    public void setProcessed(boolean processed) {
+    public DemoFile setProcessed(boolean processed) {
         this.processed = processed;
+        return this;
     }
 }

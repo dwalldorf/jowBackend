@@ -37,14 +37,21 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
     @Test
     public void testPostVerdict_Success() throws Exception {
         final String persistedVerdictId = "someId";
-        OverwatchVerdict verdict = createVerdict();
+        final User currentUser = new User();
+        currentUser.setId(USER_ID);
+        OverwatchVerdict postVerdict = createVerdict();
 
-        when(userService.getCurrentUser()).thenReturn(new User().setId(USER_ID));
-        when(verdictService.save(any())).thenReturn(verdict.setId(persistedVerdictId));
+        when(userService.getCurrentUser()).thenReturn(currentUser);
+        when(verdictService.save(any())).then(invocation -> {
+            OverwatchVerdict verdictFromControllerToService = (OverwatchVerdict) invocation.getArguments()[0];
+            verdictFromControllerToService.setId(persistedVerdictId);
+            return verdictFromControllerToService;
+        });
 
-        doPost("/overwatch/verdicts", verdict)
+        doPost("/overwatch/verdicts", postVerdict)
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(persistedVerdictId)));
+                .andExpect(jsonPath("$.id", is(persistedVerdictId)))
+                .andExpect(jsonPath("$.userId", is(currentUser.getId()))); // make sure userId gets set
     }
 
     private OverwatchVerdict createVerdict() {
@@ -55,6 +62,6 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
                 .setOtherAssist(false)
                 .setGriefing(false)
                 .setOverwatchDate(new Date())
-                .setUserId(USER_ID);
+                .setUserId(null); // userId gets set by application
     }
 }

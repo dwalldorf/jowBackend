@@ -15,8 +15,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <unit-tests.skip>false</unit-tests.skip>
-        <integration-tests.skip>false</integration-tests.skip>
+        <integration-tests.skip>true</integration-tests.skip>
 
         <springboot.version>1.4.1.RELEASE</springboot.version>
         <springsession.version>1.2.2.RELEASE</springsession.version>
@@ -32,9 +31,15 @@
 
     <profiles>
         <profile>
+            <id>docker-build</id>
+            <build>
+                <!-- docker doesn't need to know about version in filename -->
+                <finalName>owBackend</finalName>
+            </build>
+        </profile>
+        <profile>
             <id>integration-test</id>
             <properties>
-                <unit-tests.skip>false</unit-tests.skip>
                 <integration-tests.skip>false</integration-tests.skip>
             </properties>
         </profile>
@@ -150,7 +155,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <skipTests>${unit-tests.skip}</skipTests>
                     <parallel>classes</parallel>
                     <threadCount>2</threadCount>
                     <excludes>

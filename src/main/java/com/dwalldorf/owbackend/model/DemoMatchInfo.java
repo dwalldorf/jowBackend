@@ -31,67 +31,76 @@ public class DemoMatchInfo implements Serializable {
         return map;
     }
 
-    public void setMap(CSGOMap map) {
+    public DemoMatchInfo setMap(CSGOMap map) {
         this.map = map;
+        return this;
     }
 
-    public void setMap(String mapName) {
+    public DemoMatchInfo setMap(String mapName) {
         this.map = CSGOMap.valueOf(mapName);
+        return this;
     }
 
     public String getServerName() {
         return serverName;
     }
 
-    public void setServerName(String serverName) {
+    public DemoMatchInfo setServerName(String serverName) {
         this.serverName = serverName;
+        return this;
     }
 
     public Integer getTickRate() {
         return tickRate;
     }
 
-    public void setTickRate(Integer tickRate) {
+    public DemoMatchInfo setTickRate(Integer tickRate) {
         this.tickRate = tickRate;
+        return this;
     }
 
     public long getDuration() {
         return duration;
     }
 
-    public void setDuration(long duration) {
+    public DemoMatchInfo setDuration(long duration) {
         this.duration = duration;
+        return this;
     }
 
     public DemoTeam getTeam1() {
         return team1;
     }
 
-    public void setTeam1(DemoTeam team1) {
+    public DemoMatchInfo setTeam1(DemoTeam team1) {
         this.team1 = team1;
+        return this;
     }
 
     public DemoTeam getTeam2() {
         return team2;
     }
 
-    public void setTeam2(DemoTeam team2) {
+    public DemoMatchInfo setTeam2(DemoTeam team2) {
         this.team2 = team2;
+        return this;
     }
 
     public List<DemoPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<DemoPlayer> players) {
+    public DemoMatchInfo setPlayers(List<DemoPlayer> players) {
         this.players = players;
+        return this;
     }
 
     public List<DemoRound> getRounds() {
         return rounds;
     }
 
-    public void setRounds(List<DemoRound> rounds) {
+    public DemoMatchInfo setRounds(List<DemoRound> rounds) {
         this.rounds = rounds;
+        return this;
     }
 }

@@ -23,31 +23,35 @@ public class DemoEvent {
         return eventId;
     }
 
-    public void setEventId(int eventId) {
+    public DemoEvent setEventId(int eventId) {
         this.eventId = eventId;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public DemoEvent setName(String name) {
         this.name = name;
+        return this;
     }
 
     public long getTimeInRound() {
         return timeInRound;
     }
 
-    public void setTimeInRound(long timeInRound) {
+    public DemoEvent setTimeInRound(long timeInRound) {
         this.timeInRound = timeInRound;
+        return this;
     }
 
     public Map<String, String> getData() {
         return data;
     }
 
-    public void setData(Map<String, String> data) {
+    public DemoEvent setData(Map<String, String> data) {
         this.data = data;
+        return this;
     }
 }

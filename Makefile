@@ -1,18 +1,25 @@
 default: build
 
-redeploy:
-	docker-compose stop java
-	mvn package -DskipTests
-	docker-compose build java
-	docker-compose up -d java
+package:
+	mvn package -DskipTests -P docker-build
 
 build: package
 	docker-compose build
 
-run:
+deploy: package
+	docker-compose stop java
+	docker-compose build java
+	docker-compose up -d java
+
+run: package
 	docker-compose up -d
 
-recreate: package
+run-attach: package
+	docker-compose stop java
+	docker-compose build java
+	docker-compose up java
+
+restart: package
 	docker-compose down
 	docker-compuse build
 	docker-compuse up -d
@@ -20,5 +27,8 @@ recreate: package
 stop:
 	docker-compose down
 
-package:
-	mvn package
+test:
+	mvn clean test
+
+integration-test:
+	mvn clean verify -P integration-test

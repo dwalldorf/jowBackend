@@ -29,7 +29,9 @@ public class OverwatchVerdictController {
     @PostMapping
     @RequireLogin
     public ResponseEntity<OverwatchVerdict> postVerdict(@RequestBody @Valid OverwatchVerdict verdict) {
+        verdict.setUserId(userService.getCurrentUser().getId());
         verdict = verdictService.save(verdict);
+
         return new ResponseEntity<>(verdict, HttpStatus.CREATED);
     }
 

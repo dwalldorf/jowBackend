@@ -16,15 +16,17 @@ public class UserSettings implements Serializable {
         return followSteamIds;
     }
 
-    public void setFollowSteamIds(List<String> followSteamIds) {
+    public UserSettings setFollowSteamIds(List<String> followSteamIds) {
         this.followSteamIds = followSteamIds;
+        return this;
     }
 
     public boolean isAdmin() {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean isAdmin) {
+    public UserSettings setIsAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
+        return this;
     }
 }

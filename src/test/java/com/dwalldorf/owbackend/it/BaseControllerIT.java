@@ -44,7 +44,7 @@ public abstract class BaseControllerIT {
         afterSetup();
     }
 
-    private void afterSetup() {
+    protected void afterSetup() {
     }
 
     protected String toJsonString(Object obj) throws JsonProcessingException {

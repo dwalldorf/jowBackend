@@ -18,23 +18,26 @@ public class DemoPlayer implements Serializable {
         return steamId;
     }
 
-    public void setSteamId(String steamId) {
+    public DemoPlayer setSteamId(String steamId) {
         this.steamId = steamId;
+        return this;
     }
 
     public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public DemoPlayer setUserId(Integer userId) {
         this.userId = userId;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public DemoPlayer setName(String name) {
         this.name = name;
+        return this;
     }
 }

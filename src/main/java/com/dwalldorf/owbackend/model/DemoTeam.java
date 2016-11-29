@@ -21,23 +21,26 @@ public class DemoTeam implements Serializable {
         return teamName;
     }
 
-    public void setTeamName(String teamName) {
+    public DemoTeam setTeamName(String teamName) {
         this.teamName = teamName;
+        return this;
     }
 
     public Integer getTeamNumber() {
         return teamNumber;
     }
 
-    public void setTeamNumber(Integer teamNumber) {
+    public DemoTeam setTeamNumber(Integer teamNumber) {
         this.teamNumber = teamNumber;
+        return this;
     }
 
     public List<DemoPlayer> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<DemoPlayer> players) {
+    public DemoTeam setPlayers(List<DemoPlayer> players) {
         this.players = players;
+        return this;
     }
 }
