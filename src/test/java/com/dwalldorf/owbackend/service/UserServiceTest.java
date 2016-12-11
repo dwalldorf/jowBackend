@@ -1,17 +1,17 @@
-package com.dwalldorf.owbackend.unit.service;
+package com.dwalldorf.owbackend.service;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
-import com.dwalldorf.owbackend.service.PasswordService;
-import com.dwalldorf.owbackend.service.UserService;
-import com.dwalldorf.owbackend.unit.BaseTest;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import org.junit.Test;
@@ -20,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.slf4j.Logger;
 
 public class UserServiceTest extends BaseTest {
 
@@ -33,6 +34,9 @@ public class UserServiceTest extends BaseTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private Logger logger;
 
     @Mock
     private HttpSession httpSession;
@@ -63,8 +67,30 @@ public class UserServiceTest extends BaseTest {
         assertNull(secureUserCopy.getHashedPassword());
     }
 
+    @Test(expected = InvalidInputException.class)
+    public void testRegister_UsernameExists() throws Exception {
+        final String username = "username";
+        User user = new User();
+        user.setUsername(username);
+
+        when(userRepository.findByUsernameOrEmail(eq(username), anyString())).thenReturn(new User());
+
+        userService.register(user);
+    }
+
+    @Test(expected = InvalidInputException.class)
+    public void testRegister_EmailExists() throws Exception {
+        final String email = "test@example.com";
+        User user = new User();
+        user.setEmail(email);
+
+        when(userRepository.findByUsernameOrEmail(anyString(), eq(email))).thenReturn(new User());
+
+        userService.register(user);
+    }
+
     @Test
-    public void testRegisterSetsRegistrationDate() throws Exception {
+    public void testRegister_SetsRegistrationDate() throws Exception {
         User user = createUser();
         user.setRegistration(null);
         assertNull(user.getRegistration());
@@ -76,7 +102,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testRegisterHashesCorrectly() {
+    public void testRegister_HashesCorrectly() {
         User user = createUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(passwordService.createSalt()).thenReturn(SALT);
@@ -88,7 +114,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testRegisterReturnSecureUserCopy() {
+    public void testRegister_ReturnSecureUserCopy() {
         User user = createUser();
         when(userRepository.save(any(User.class))).thenReturn(user);
         when(passwordService.createSalt()).thenReturn(SALT);

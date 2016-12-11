@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.queue;
 
+import com.dwalldorf.owbackend.annotation.Log;
 import com.dwalldorf.owbackend.model.Demo;
 import com.dwalldorf.owbackend.model.DemoFile;
 import com.dwalldorf.owbackend.service.DemoFileService;
@@ -8,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageListener;
 import org.springframework.stereotype.Component;
@@ -16,16 +16,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoDataReceiver implements MessageListener {
 
-    private final static Logger logger = LoggerFactory.getLogger(DemoDataReceiver.class);
+    @Log
+    private Logger logger;
 
-    @Inject
     private ObjectMapper objectMapper;
 
-    @Inject
     private DemoService demoService;
 
-    @Inject
     private DemoFileService demoFileService;
+
+    @Inject
+    public DemoDataReceiver(ObjectMapper objectMapper, DemoService demoService, DemoFileService demoFileService) {
+        this.objectMapper = objectMapper;
+        this.demoService = demoService;
+        this.demoFileService = demoFileService;
+    }
 
     @Override
     public void onMessage(Message message) {
@@ -46,7 +51,7 @@ public class DemoDataReceiver implements MessageListener {
             demoService.save(demo);
 
             demoFile.setProcessed();
-            demoFileService.save(demoFile);
+            demoFileService.update(demoFile);
 
             logger.info("received message from queue: \n {}", message);
         } catch (IOException e) {

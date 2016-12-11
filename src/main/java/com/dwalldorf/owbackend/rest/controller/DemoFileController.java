@@ -2,6 +2,7 @@ package com.dwalldorf.owbackend.rest.controller;
 
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
+import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.DemoFile;
 import com.dwalldorf.owbackend.queue.DemoTaskProducer;
 import com.dwalldorf.owbackend.service.DemoFileService;
@@ -18,21 +19,25 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/demofiles")
 public class DemoFileController {
 
-    @Inject
     private DemoFileService demoFileService;
 
-    @Inject
     private DemoTaskProducer demoTaskProducer;
+
+    @Inject
+    public DemoFileController(DemoFileService demoFileService, DemoTaskProducer demoTaskProducer) {
+        this.demoFileService = demoFileService;
+        this.demoTaskProducer = demoTaskProducer;
+    }
 
     @PostMapping
     @RequireLogin
-    public ResponseEntity<DemoFile> uploadDemoFile(@RequestParam("file") MultipartFile file) throws InvalidInputException {
+    public ResponseEntity<DemoFile> uploadDemoFile(@RequestParam("file") MultipartFile file) throws InvalidInputException, LoginRequiredException {
         DemoFile demoFile = demoFileService.storeDemo(file);
-        demoFile = demoFileService.persist(demoFile);
+        demoFile = demoFileService.save(demoFile);
         demoTaskProducer.queueDemo(demoFile);
 
         demoFile.setQueued();
-        demoFile = demoFileService.save(demoFile);
+        demoFile = demoFileService.update(demoFile);
 
         return new ResponseEntity<>(demoFile, HttpStatus.CREATED);
     }

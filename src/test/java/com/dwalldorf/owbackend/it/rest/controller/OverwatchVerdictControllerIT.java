@@ -2,7 +2,7 @@ package com.dwalldorf.owbackend.it.rest.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +45,7 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
         when(verdictService.save(any())).then(invocation -> {
             OverwatchVerdict verdictFromControllerToService = (OverwatchVerdict) invocation.getArguments()[0];
             verdictFromControllerToService.setId(persistedVerdictId);
+            verdictFromControllerToService.setUserId(currentUser.getId());
             return verdictFromControllerToService;
         });
 
@@ -56,7 +57,7 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
 
     private OverwatchVerdict createVerdict() {
         return new OverwatchVerdict()
-                .setMap(CSGOMap.DE_COBBLESTONE)
+                .setMap(CSGOMap.de_cobblestone)
                 .setAimAssist(true)
                 .setVisionAssist(false)
                 .setOtherAssist(false)

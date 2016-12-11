@@ -8,7 +8,7 @@ import com.dwalldorf.owbackend.it.BaseControllerIT;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 
-public class VersionControllerTestIT extends BaseControllerIT {
+public class VersionControllerIT extends BaseControllerIT {
 
     @Value("${app.version}")
     private String version;

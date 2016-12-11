@@ -1,11 +1,11 @@
-package com.dwalldorf.owbackend.unit.service;
+package com.dwalldorf.owbackend.service;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
 
-import com.dwalldorf.owbackend.service.PasswordService;
-import com.dwalldorf.owbackend.unit.BaseTest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import com.dwalldorf.owbackend.BaseTest;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;

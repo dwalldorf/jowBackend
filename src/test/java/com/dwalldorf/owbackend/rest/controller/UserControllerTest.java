@@ -1,17 +1,19 @@
-package com.dwalldorf.owbackend.unit.rest.controller;
+package com.dwalldorf.owbackend.rest.controller;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+import com.dwalldorf.owbackend.BaseTest;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
-import com.dwalldorf.owbackend.rest.controller.UserController;
+import com.dwalldorf.owbackend.repository.UserRepository;
 import com.dwalldorf.owbackend.rest.dto.LoginDto;
 import com.dwalldorf.owbackend.service.UserService;
-import com.dwalldorf.owbackend.unit.BaseTest;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class UserControllerTest extends BaseTest {
 
@@ -33,6 +35,8 @@ public class UserControllerTest extends BaseTest {
 
     @Test(expected = InvalidInputException.class)
     public void testLogin_NoUsername() throws Exception {
+        ReflectionTestUtils.setField(userService, "userRepository", Mockito.mock(UserRepository.class));
+
         LoginDto loginDto = new LoginDto();
         loginDto.setPassword("password");
 
@@ -43,6 +47,8 @@ public class UserControllerTest extends BaseTest {
 
     @Test(expected = InvalidInputException.class)
     public void testLogin_NoPassword() throws Exception {
+        ReflectionTestUtils.setField(userService, "userRepository", Mockito.mock(UserRepository.class));
+
         LoginDto loginDto = new LoginDto();
         loginDto.setUsername("username");
 

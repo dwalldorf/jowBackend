@@ -1,5 +1,9 @@
 package com.dwalldorf.owbackend.service;
 
+import static com.dwalldorf.owbackend.Application.appInfoMarker;
+
+import com.dwalldorf.owbackend.annotation.Log;
+import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
 import java.util.Date;
@@ -7,24 +11,35 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
 
-    private final static Logger logger = LoggerFactory.getLogger(UserService.class);
+    @Log
+    private Logger logger;
 
-    @Inject
     private UserRepository userRepository;
 
-    @Inject
     private HttpSession httpSession;
 
-    @Inject
     private PasswordService passwordService;
 
+    @Inject
+    public UserService(UserRepository userRepository, HttpSession httpSession, PasswordService passwordService) {
+        this.userRepository = userRepository;
+        this.httpSession = httpSession;
+        this.passwordService = passwordService;
+    }
+
+    @Transactional
     public User register(User user) {
+        User byUsernameOrEmail = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
+        if (byUsernameOrEmail != null) {
+            throw new InvalidInputException("username or email already in use");
+        }
+
         user.setRegistration(new Date());
         user.setSalt(passwordService.createSalt());
         user.setHashedPassword(
@@ -32,11 +47,9 @@ public class UserService {
         );
 
         User persistedUser = userRepository.save(user);
-        return getSecureUserCopy(persistedUser);
-    }
 
-    public User findByUsernameOrEmail(final String username) {
-        return userRepository.findByUsernameOrEmail(username, username);
+        logger.info(appInfoMarker, "User {} registered", persistedUser.getUsername());
+        return getSecureUserCopy(persistedUser);
     }
 
     public User findById(final String userId) {
@@ -51,12 +64,16 @@ public class UserService {
 
         boolean passwordMatch = passwordService.isExpectedPassword(password.toCharArray(), dbUser.getSalt(), dbUser.getHashedPassword());
         if (!passwordMatch) {
-            logger.info("Login failed for user '{}'", username);
+            logger.info(appInfoMarker, "Login failed for user '{}'", username);
             return null;
         }
 
         initializeUserSession(dbUser);
         return getCurrentUser();
+    }
+
+    private User findByUsernameOrEmail(final String username) {
+        return userRepository.findByUsernameOrEmail(username, username);
     }
 
     public User getSecureUserCopy(final User user) {
@@ -78,7 +95,7 @@ public class UserService {
 
         httpSession.setAttribute("user", user);
 
-        logger.info("User '{}' logged in", user.getUsername());
+        logger.info(appInfoMarker, "User '{}' logged in", user.getUsername());
     }
 
     public User getCurrentUser() {

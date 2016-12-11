@@ -17,11 +17,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/demos")
 public class DemoController {
 
-    @Inject
     private UserService userService;
 
-    @Inject
     private DemoService demoService;
+
+    @Inject
+    public DemoController(UserService userService, DemoService demoService) {
+        this.userService = userService;
+        this.demoService = demoService;
+    }
 
     @GetMapping
     @RequireLogin

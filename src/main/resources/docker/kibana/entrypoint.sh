@@ -6,5 +6,7 @@ while true; do
     nc -q 1 elasticsearch 9200 2>/dev/null && break
 done
 
+curl -XPUT elasticsearch:9200/.kibana/dashboard/testdashboard -d kibanaObject.json
+
 echo "Starting Kibana"
 exec kibana

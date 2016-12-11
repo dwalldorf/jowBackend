@@ -1,12 +1,14 @@
 package com.dwalldorf.owbackend.rest.controller;
 
+import static com.dwalldorf.owbackend.Application.appInfoMarker;
+
+import com.dwalldorf.owbackend.annotation.Log;
 import com.dwalldorf.owbackend.exception.AdminRequiredException;
 import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.service.UserService;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,17 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ErrorController {
 
-    private final static Logger logger = LoggerFactory.getLogger(ErrorController.class);
+    private final static String NOT_FOUND = "NOT FOUND";
+
+    @Log
+    private Logger logger;
+
+    private UserService userService;
 
     @Inject
-    private UserService userService;
+    public ErrorController(UserService userService) {
+        this.userService = userService;
+    }
 
     @ExceptionHandler(LoginRequiredException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleLoginRequireException(LoginRequiredException e) {
-        logger.error(e.getMessage());
+        logger.warn(appInfoMarker, e.getMessage());
 
-        return "NOT FOUND";
+        return NOT_FOUND;
     }
 
     @ExceptionHandler(AdminRequiredException.class)
@@ -37,11 +46,11 @@ public class ErrorController {
         final User currentUser = userService.getCurrentUser();
 
         if (currentUser != null) {
-            logger.error("{} -- by user: {}", errorMessage, currentUser.getId());
+            logger.warn(appInfoMarker, "{} -- by user: {}", errorMessage, currentUser.getId());
         } else {
-            logger.error(errorMessage);
+            logger.warn(appInfoMarker, errorMessage);
         }
 
-        return "NOT FOUND";
+        return NOT_FOUND;
     }
 }

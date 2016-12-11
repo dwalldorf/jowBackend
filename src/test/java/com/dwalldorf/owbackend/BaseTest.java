@@ -1,4 +1,4 @@
-package com.dwalldorf.owbackend.unit;
+package com.dwalldorf.owbackend;
 
 import org.junit.Before;
 import org.junit.runner.RunWith;
@@ -11,7 +11,7 @@ public abstract class BaseTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        afterSetup();
+        this.afterSetup();
     }
 
     protected void afterSetup() {

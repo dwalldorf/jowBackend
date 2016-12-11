@@ -1,6 +1,7 @@
 package com.dwalldorf.owbackend.rest.controller;
 
 import com.dwalldorf.owbackend.annotation.RequireLogin;
+import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.exception.NotFoundException;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
@@ -15,24 +16,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/overwatch/verdicts")
+@RestController
+@RequestMapping("/overwatch/verdicts")
 public class OverwatchVerdictController {
 
-    @Inject
     private OverwatchVerdictService verdictService;
 
-    @Inject
     private UserService userService;
+
+    @Inject
+    public OverwatchVerdictController(OverwatchVerdictService verdictService, UserService userService) {
+        this.verdictService = verdictService;
+        this.userService = userService;
+    }
 
     @PostMapping
     @RequireLogin
-    public ResponseEntity<OverwatchVerdict> postVerdict(@RequestBody @Valid OverwatchVerdict verdict) {
-        verdict.setUserId(userService.getCurrentUser().getId());
-        verdict = verdictService.save(verdict);
-
-        return new ResponseEntity<>(verdict, HttpStatus.CREATED);
+    public ResponseEntity<OverwatchVerdict> postVerdict(@RequestBody @Valid OverwatchVerdict verdict) throws LoginRequiredException {
+        return new ResponseEntity<>(verdictService.save(verdict), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")

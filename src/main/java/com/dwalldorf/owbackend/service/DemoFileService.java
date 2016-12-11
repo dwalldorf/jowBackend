@@ -1,6 +1,8 @@
 package com.dwalldorf.owbackend.service;
 
+import com.dwalldorf.owbackend.annotation.Log;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
+import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.DemoFile;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.DemoFileRepository;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import javax.inject.Inject;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,7 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class DemoFileService {
 
-    private final static Logger logger = LoggerFactory.getLogger(DemoFileService.class);
+    @Log
+    private Logger logger;
 
     @Value("${app.demo.upload.dest}")
     private String uploadDirectory;
@@ -32,20 +34,17 @@ public class DemoFileService {
         return demoFileRepository.findOne(id);
     }
 
-    public DemoFile persist(DemoFile demoFile) {
+    public DemoFile save(DemoFile demoFile) throws LoginRequiredException {
         User currentUser = userService.getCurrentUser();
-        if (currentUser != null) {
-            demoFile.setUserId(currentUser.getId());
-        }
-
-        DemoFile savedDemoFile = demoFileRepository.save(demoFile);
         if (currentUser == null) {
-            logger.warn("Persisting demofile without knowing current user. DemoFile id: {}", savedDemoFile.getId());
+            throw new LoginRequiredException();
         }
-        return savedDemoFile;
+        demoFile.setUserId(currentUser.getId());
+
+        return demoFileRepository.save(demoFile);
     }
 
-    public DemoFile save(DemoFile demoFile) {
+    public DemoFile update(DemoFile demoFile) {
         return demoFileRepository.save(demoFile);
     }
 

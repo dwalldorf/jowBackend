@@ -7,18 +7,18 @@ import javax.inject.Inject;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
 public class RequireRoleInvocationHandler {
 
-    private final static Logger logger = LoggerFactory.getLogger(RequireRoleInvocationHandler.class);
+    private UserService userService;
 
     @Inject
-    private UserService userService;
+    public RequireRoleInvocationHandler(UserService userService) {
+        this.userService = userService;
+    }
 
     @Before("execution(* *(..)) && @annotation(RequireLogin)")
     public void checkLoginBefore(JoinPoint joinPoint) throws Exception {

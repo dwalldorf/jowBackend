@@ -1,6 +1,6 @@
-package com.dwalldorf.owbackend.unit.rest.controller;
+package com.dwalldorf.owbackend.rest.controller;
 
-import com.dwalldorf.owbackend.unit.BaseTest;
+import com.dwalldorf.owbackend.BaseTest;
 import org.junit.Test;
 
 public class DemoFileControllerTest extends BaseTest {

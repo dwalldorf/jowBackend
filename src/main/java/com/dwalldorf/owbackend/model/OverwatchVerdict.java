@@ -3,8 +3,10 @@ package com.dwalldorf.owbackend.model;
 import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
+@Document(collection = OverwatchVerdict.COLLECTION_NAME)
 public class OverwatchVerdict {
+
+    public final static String COLLECTION_NAME = "verdicts";
 
     private String id;
 

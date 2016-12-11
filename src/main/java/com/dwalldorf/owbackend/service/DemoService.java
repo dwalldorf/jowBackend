@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class DemoService {
 
-    @Inject
     private DemoRepository demoRepository;
+
+    @Inject
+    public DemoService(DemoRepository demoRepository) {
+        this.demoRepository = demoRepository;
+    }
 
     public Demo save(Demo demo) {
         return demoRepository.save(demo);

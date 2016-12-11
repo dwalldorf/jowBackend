@@ -4,6 +4,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import com.dwalldorf.owbackend.Application;
+import com.dwalldorf.owbackend.repository.DemoFileRepository;
+import com.dwalldorf.owbackend.repository.DemoRepository;
+import com.dwalldorf.owbackend.repository.OverwatchUserScoreRepository;
+import com.dwalldorf.owbackend.repository.OverwatchVerdictRepository;
+import com.dwalldorf.owbackend.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
@@ -11,6 +16,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,10 +37,25 @@ public abstract class BaseControllerIT {
     protected MockMvc mockMvc;
 
     @Inject
-    protected WebApplicationContext ctx;
+    private WebApplicationContext ctx;
 
     @Inject
     private ObjectMapper mapper;
+
+    @MockBean
+    protected DemoFileRepository demoFileRepositoryMock;
+
+    @MockBean
+    protected DemoRepository demoRepository;
+
+    @MockBean
+    protected OverwatchUserScoreRepository overwatchUserScoreRepository;
+
+    @MockBean
+    protected OverwatchVerdictRepository overwatchVerdictRepository;
+
+    @MockBean
+    protected UserRepository userRepository;
 
     @Before
     public void setUp() throws Exception {

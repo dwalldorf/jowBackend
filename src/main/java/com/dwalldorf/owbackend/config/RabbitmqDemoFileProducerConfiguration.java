@@ -34,10 +34,9 @@ public class RabbitmqDemoFileProducerConfiguration extends RabbitmqConfiguration
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
+        RabbitTemplate template = super.rabbitTemplate();
         template.setRoutingKey(parseQueue);
         template.setQueue(parseQueue);
-        template.setMessageConverter(jsonMessageConverter());
 
         return template;
     }

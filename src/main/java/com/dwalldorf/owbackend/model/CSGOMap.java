@@ -2,21 +2,21 @@ package com.dwalldorf.owbackend.model;
 
 public enum CSGOMap {
     de_dust2("de_dust2"),
-    DE_COBBLESTONE("de_cobblestone"),
-    DE_CACHE("de_cache"),
-    DE_OVERPASS("de_overpass"),
+    de_cobblestone("de_cobblestone"),
+    de_cache("de_cache"),
+    de_overpass("de_overpass"),
     de_mirage("de_mirage"),
     de_nuke("de_nuke"),
-    DE_TRAIN("de_train"),
+    de_train("de_train"),
 
-    DE_INFERNO("de_info"),
-    DE_DUST("de_dust"),
-    CS_ASSAULT("cs_assault"),
-    CS_MILITIA("cs_militia"),
-    CS_OFFICE("cs_office"),
-    DE_VERTIGO("de_vertigo"),
-    CS_ITALY("cs_italy"),
-    DE_AZTEC("de_aztec");
+    de_inferno("de_inferno"),
+    de_dust("de_dust"),
+    cs_assault("cs_assault"),
+    cs_militia("cs_militia"),
+    cs_office("cs_office"),
+    de_vertigo("de_vertigo"),
+    cs_italy("cs_italy"),
+    de_aztec("de_aztec");
 
     private final String name;
 

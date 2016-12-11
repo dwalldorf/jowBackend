@@ -18,15 +18,18 @@ public class RabbitmqDemoInfoConsumerConfiguration extends RabbitmqConfiguration
     @Value("${amqp.queues.analyze}")
     private String queue;
 
-    @Inject
     private DemoDataReceiver demoDataReceiver;
+
+    @Inject
+    public RabbitmqDemoInfoConsumerConfiguration(DemoDataReceiver demoDataReceiver) {
+        this.demoDataReceiver = demoDataReceiver;
+    }
 
     @Bean
     public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
+        RabbitTemplate template = super.rabbitTemplate();
         template.setRoutingKey(queue);
         template.setQueue(queue);
-        template.setMessageConverter(jsonMessageConverter());
 
         return template;
     }
