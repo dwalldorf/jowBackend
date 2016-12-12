@@ -35,7 +35,7 @@ public class RequireRoleInvocationHandler {
         if (userService.getCurrentUser() == null) {
             throw new LoginRequiredException(signature + " called without login");
         }
-        if (!userService.getCurrentUser().getUserSettings().isAdmin()) {
+        if (!userService.getCurrentUser().getUserProperties().getUserSettings().isAdmin()) {
             throw new AdminRequiredException(signature + " called without admin rights");
         }
     }

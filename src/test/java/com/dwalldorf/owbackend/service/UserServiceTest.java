@@ -53,22 +53,22 @@ public class UserServiceTest extends BaseTest {
         User secureUserCopy = userService.getSecureUserCopy(user);
 
         assertEquals(ID, secureUserCopy.getId());
-        assertEquals(USERNAME, secureUserCopy.getUsername());
-        assertEquals(EMAIL, secureUserCopy.getEmail());
-        assertEquals(REGISTRATION, secureUserCopy.getRegistration());
+        assertEquals(USERNAME, secureUserCopy.getUserProperties().getUsername());
+        assertEquals(EMAIL, secureUserCopy.getUserProperties().getEmail());
+        assertEquals(REGISTRATION, secureUserCopy.getUserProperties().getRegistration());
 
-        assertNull(secureUserCopy.getPassword());
-        assertNull(secureUserCopy.getSalt());
-        assertNull(secureUserCopy.getHashedPassword());
+        assertNull(secureUserCopy.getUserProperties().getPassword());
+        assertNull(secureUserCopy.getUserProperties().getSalt());
+        assertNull(secureUserCopy.getUserProperties().getHashedPassword());
     }
 
     @Test(expected = InvalidInputException.class)
     public void testRegister_UsernameExists() throws Exception {
         final String username = "username";
         User user = new User();
-        user.setUsername(username);
+        user.getUserProperties().setUsername(username);
 
-        when(userRepository.findByUsernameOrEmail(eq(username), anyString())).thenReturn(new User());
+        when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(username), anyString())).thenReturn(new User());
 
         userService.register(user);
     }
@@ -76,10 +76,10 @@ public class UserServiceTest extends BaseTest {
     @Test(expected = InvalidInputException.class)
     public void testRegister_EmailExists() throws Exception {
         final String email = "test@example.com";
-        User user = new User()
-                .setEmail(email);
+        User user = new User();
+        user.getUserProperties().setEmail(email);
 
-        when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(new User());
+        when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(anyString(), anyString())).thenReturn(new User());
 
         userService.register(user);
     }
@@ -87,13 +87,13 @@ public class UserServiceTest extends BaseTest {
     @Test
     public void testRegister_SetsRegistrationDate() throws Exception {
         User user = createUser();
-        user.setRegistration(null);
-        assertNull(user.getRegistration());
+        user.getUserProperties().setRegistration(null);
+        assertNull(user.getUserProperties().getRegistration());
 
         when(userRepository.save(any(User.class))).thenReturn(user);
         User registeredUser = userService.register(user);
 
-        assertNotNull(registeredUser.getRegistration());
+        assertNotNull(registeredUser.getUserProperties().getRegistration());
     }
 
     @Test
@@ -116,14 +116,14 @@ public class UserServiceTest extends BaseTest {
 
         User registeredUser = userService.register(user);
 
-        assertNull(registeredUser.getPassword());
-        assertNull(registeredUser.getSalt());
-        assertNull(registeredUser.getHashedPassword());
+        assertNull(registeredUser.getUserProperties().getPassword());
+        assertNull(registeredUser.getUserProperties().getSalt());
+        assertNull(registeredUser.getUserProperties().getHashedPassword());
     }
 
     @Test
     public void testLoginReturnsNullIfUserNotFound() {
-        when(userRepository.findByUsernameOrEmail(eq(USERNAME), eq(USERNAME))).thenReturn(null);
+        when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(null);
         User retVal = userService.login(USERNAME, PASSWORD);
 
         assertNull(retVal);
@@ -131,15 +131,15 @@ public class UserServiceTest extends BaseTest {
 
     @Test
     public void testLoginReturnsNullIfUserFoundButWrongPassword() {
-        when(userRepository.findByUsernameOrEmail(eq(USERNAME), eq(USERNAME))).thenReturn(createUser());
+        when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(createUser());
 
         User retVal = userService.login(USERNAME, "wrongPassword");
         assertNull(retVal);
     }
 
     private User createUser() {
-        User user = new User();
-        user.setId(ID)
+        User user = new User(ID);
+        user.getUserProperties()
             .setUsername(USERNAME)
             .setEmail(EMAIL)
             .setRegistration(REGISTRATION)

@@ -6,6 +6,7 @@ import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.rest.dto.LoginDto;
+import com.dwalldorf.owbackend.rest.dto.UserDto;
 import com.dwalldorf.owbackend.service.UserService;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
@@ -34,7 +35,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> register(@RequestBody User user) {
+    public ResponseEntity<User> register(@RequestBody UserDto userDto) {
+        User user = new User();
+        user.getUserProperties()
+            .setUsername(userDto.getUsername())
+            .setEmail(userDto.getEmail())
+            .setPassword(userDto.getPassword());
+
         User persistedUser = userService.register(user);
         return new ResponseEntity<>(persistedUser, HttpStatus.CREATED);
     }

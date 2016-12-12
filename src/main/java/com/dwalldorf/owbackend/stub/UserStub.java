@@ -21,12 +21,14 @@ public class UserStub {
         UserSettings userSettings = new UserSettings()
                 .setIsAdmin(isAdmin);
 
-        return new User()
-                .setId(userId)
-                .setUsername(username)
-                .setEmail(email)
-                .setRegistration(registration)
-                .setUserSettings(userSettings);
+        User user = new User(userId);
+        user.getUserProperties()
+            .setUsername(username)
+            .setEmail(email)
+            .setRegistration(registration)
+            .setUserSettings(userSettings);
+
+        return user;
     }
 
     public User createUser(boolean isAdmin) {

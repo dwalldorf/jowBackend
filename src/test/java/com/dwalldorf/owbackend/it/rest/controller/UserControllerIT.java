@@ -45,10 +45,10 @@ public class UserControllerIT extends BaseControllerIT {
         doGet(URI_ME)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
-                .andExpect(jsonPath("$.username", is(user.getUsername())))
-                .andExpect(jsonPath("$.email", is(user.getEmail())))
-                .andExpect(jsonPath("$.registration", anything()))
-                .andExpect(jsonPath("$.userSettings", anything()));
+                .andExpect(jsonPath("$.userProperties.username", is(user.getUserProperties().getUsername())))
+                .andExpect(jsonPath("$.userProperties.email", is(user.getUserProperties().getEmail())))
+                .andExpect(jsonPath("$.userProperties.registration", anything()))
+                .andExpect(jsonPath("$.userProperties.userSettings", anything()));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class UserControllerIT extends BaseControllerIT {
         doPost(URI_LOGIN, loginDto)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
-                .andExpect(jsonPath("$.username", is(user.getUsername())));
+                .andExpect(jsonPath("$.userProperties.username", is(user.getUserProperties().getUsername())));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class UserControllerIT extends BaseControllerIT {
         User user = createUser(true);
         User someOtherUser = createUser();
         someOtherUser.setId("someotherId");
-        someOtherUser.setUsername("someOtherUsername");
+        someOtherUser.getUserProperties().setUsername("someOtherUsername");
 
         when(userServiceMock.getCurrentUser()).thenReturn(user);
         when(userServiceMock.getUsers()).thenReturn(Arrays.asList(user, someOtherUser));
@@ -132,11 +132,11 @@ public class UserControllerIT extends BaseControllerIT {
         userSettings.setIsAdmin(isAdmin);
 
         User user = new User();
-        user.setId("userId");
-        user.setUsername("testUser");
-        user.setEmail("user@provider.test");
-        user.setRegistration(new Date());
-        user.setUserSettings(userSettings);
+        user.getUserProperties()
+            .setUsername("testUser")
+            .setEmail("user@provider.test")
+            .setRegistration(new Date())
+            .setUserSettings(userSettings);
 
         return user;
     }

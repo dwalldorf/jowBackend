@@ -58,9 +58,8 @@ public class TestDataController {
         }
 
         for (int createdUsers = 0; createdUsers < users; createdUsers++) {
-            User currentUser = userStub.createUser()
-                                       .setId(null)
-                                       .setPassword(randomUtil.randomString(20));
+            User currentUser = userStub.createUser().setId(null);
+            currentUser.getUserProperties().setPassword(randomUtil.randomString(20));
 
             currentUser = userService.register(currentUser);
 

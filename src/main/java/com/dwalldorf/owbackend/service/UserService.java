@@ -5,6 +5,7 @@ import static com.dwalldorf.owbackend.Application.appInfoMarker;
 import com.dwalldorf.owbackend.annotation.Log;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.model.UserProperties;
 import com.dwalldorf.owbackend.repository.UserRepository;
 import java.util.Date;
 import java.util.List;
@@ -35,20 +36,22 @@ public class UserService {
 
     @Transactional
     public User register(User user) {
-        User byUsernameOrEmail = userRepository.findByUsernameOrEmail(user.getUsername(), user.getEmail());
+        UserProperties properties = user.getUserProperties();
+
+        User byUsernameOrEmail = userRepository.findByUserProperties_UsernameOrUserProperties_Email(properties.getUsername(), properties.getEmail());
         if (byUsernameOrEmail != null) {
             throw new InvalidInputException("username or email already in use");
         }
 
-        user.setRegistration(new Date());
-        user.setSalt(passwordService.createSalt());
-        user.setHashedPassword(
-                passwordService.hash(user.getPassword().toCharArray(), user.getSalt())
-        );
+        properties.setRegistration(new Date())
+                  .setSalt(passwordService.createSalt())
+                  .setHashedPassword(
+                          passwordService.hash(properties.getPassword().toCharArray(), properties.getSalt())
+                  );
 
         User persistedUser = userRepository.save(user);
 
-        logger.info(appInfoMarker, "User {} registered", persistedUser.getUsername());
+        logger.info(appInfoMarker, "User {} registered", properties.getUsername());
         return getSecureUserCopy(persistedUser);
     }
 
@@ -62,7 +65,8 @@ public class UserService {
             return null;
         }
 
-        boolean passwordMatch = passwordService.isExpectedPassword(password.toCharArray(), dbUser.getSalt(), dbUser.getHashedPassword());
+        UserProperties properties = dbUser.getUserProperties();
+        boolean passwordMatch = passwordService.isExpectedPassword(password.toCharArray(), properties.getSalt(), properties.getHashedPassword());
         if (!passwordMatch) {
             logger.info(appInfoMarker, "Login failed for user '{}'", username);
             return null;
@@ -73,29 +77,23 @@ public class UserService {
     }
 
     private User findByUsernameOrEmail(final String username) {
-        return userRepository.findByUsernameOrEmail(username, username);
+        return userRepository.findByUserProperties_UsernameOrUserProperties_Email(username, username);
     }
 
     public User getSecureUserCopy(final User user) {
-        return new User(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail(),
-                null,
-                null,
-                null,
-                user.getRegistration(),
-                user.getUserSettings()
-        );
+        user.getUserProperties()
+            .setPassword(null)
+            .setSalt(null)
+            .setHashedPassword(null);
+
+        return user;
     }
 
     private void initializeUserSession(User user) {
-        user.setPassword(null);
-        user.setSalt(null);
-
+        user = getSecureUserCopy(user);
         httpSession.setAttribute("user", user);
 
-        logger.info(appInfoMarker, "User '{}' logged in", user.getUsername());
+        logger.info(appInfoMarker, "User '{}' logged in", user.getUserProperties().getUsername());
     }
 
     public User getCurrentUser() {

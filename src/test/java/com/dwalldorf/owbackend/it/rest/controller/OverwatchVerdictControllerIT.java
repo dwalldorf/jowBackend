@@ -51,9 +51,8 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
     public void testPostVerdict_Success() throws Exception {
         final String userId = "userId";
         final String persistedVerdictId = "someId";
-        final User currentUser = new User();
+        final User currentUser = new User(userId);
 
-        currentUser.setId(userId);
         OverwatchVerdict postVerdict = createVerdict();
 
         when(userService.getCurrentUser()).thenReturn(currentUser);
