@@ -27,6 +27,7 @@ public class OverwatchVerdictController {
 
     public static final String URI_BASE = "/overwatch";
     public static final String URI_VERDICTS = "/verdicts";
+    public final static String URI_MAPS = "/maps";
 
     private OverwatchVerdictService verdictService;
 
@@ -55,7 +56,7 @@ public class OverwatchVerdictController {
         return new ListDto<>(verdictService.findByUser(user));
     }
 
-    @GetMapping("/maps")
+    @GetMapping(URI_MAPS)
     public ListDto<CSGOMap> getMaps() {
         return new ListDto<>(Arrays.asList(CSGOMap.values()));
     }

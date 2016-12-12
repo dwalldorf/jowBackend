@@ -45,10 +45,10 @@ public class UserControllerIT extends BaseControllerIT {
         doGet(URI_ME)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
-                .andExpect(jsonPath("$.userProperties.username", is(user.getUserProperties().getUsername())))
-                .andExpect(jsonPath("$.userProperties.email", is(user.getUserProperties().getEmail())))
-                .andExpect(jsonPath("$.userProperties.registration", anything()))
-                .andExpect(jsonPath("$.userProperties.userSettings", anything()));
+                .andExpect(jsonPath("$.username", is(user.getUserProperties().getUsername())))
+                .andExpect(jsonPath("$.email", is(user.getUserProperties().getEmail())))
+                .andExpect(jsonPath("$.registration", anything()))
+                .andExpect(jsonPath("$.userSettings", anything()));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class UserControllerIT extends BaseControllerIT {
         doPost(URI_LOGIN, loginDto)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
-                .andExpect(jsonPath("$.userProperties.username", is(user.getUserProperties().getUsername())));
+                .andExpect(jsonPath("$.username", is(user.getUserProperties().getUsername())));
     }
 
     @Test

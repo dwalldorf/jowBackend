@@ -1,5 +1,7 @@
 package com.dwalldorf.owbackend.rest.dto;
 
+import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.model.UserProperties;
 import com.dwalldorf.owbackend.model.UserSettings;
 import java.io.Serializable;
 import java.util.Date;
@@ -25,6 +27,34 @@ public class UserDto implements Serializable {
     private Date registration;
 
     private UserSettings userSettings;
+
+    public static UserDto fromUser(User user) {
+        if (user == null) {
+            return null;
+        }
+
+        UserProperties properties = user.getUserProperties();
+
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId())
+               .setUsername(properties.getUsername())
+               .setEmail(properties.getEmail())
+               .setRegistration(properties.getRegistration())
+               .setUserSettings(properties.getUserSettings());
+
+        return userDto;
+    }
+
+    public static User toUser(UserDto userDto) {
+        User user = new User(userDto.getId());
+        user.getUserProperties()
+            .setUsername(userDto.getUsername())
+            .setEmail(userDto.getEmail())
+            .setPassword(userDto.getPassword())
+            .setUserSettings(userDto.getUserSettings());
+
+        return user;
+    }
 
     public String getId() {
         return id;

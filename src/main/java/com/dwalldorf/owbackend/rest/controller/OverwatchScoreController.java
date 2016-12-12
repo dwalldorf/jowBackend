@@ -18,8 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/overwatch/scores")
+@RequestMapping(OverwatchVerdictController.URI_BASE)
 public class OverwatchScoreController {
+
+    public static final String URI_SCORES = "/scores";
+
+    public static final String URI_SCORES_LOWER = URI_SCORES + "/lower";
+    public static final String URI_SCORES_HIGHER = URI_SCORES + "/higher";
 
     private UserService userService;
 
@@ -31,7 +36,7 @@ public class OverwatchScoreController {
         this.scoreService = scoreService;
     }
 
-    @GetMapping("/{userId}/{periodValue}")
+    @GetMapping(URI_SCORES + "/{userId}/{periodValue}")
     public OverwatchUserScore getByUser(
             @PathVariable String userId,
             @PathVariable Integer periodValue) throws NotFoundException {
@@ -42,7 +47,7 @@ public class OverwatchScoreController {
         return scoreService.findByUserIdAndPeriod(user, period);
     }
 
-    @GetMapping("/lower/{userId}/{periodValue}")
+    @GetMapping(URI_SCORES_HIGHER + "/{userId}/{periodValue}")
     public ListDto<OverwatchUserScore> getHigherThanUser(
             @PathVariable String userId,
             @PathVariable Integer periodValue,
@@ -58,7 +63,7 @@ public class OverwatchScoreController {
         return new ListDto<>(scores);
     }
 
-    @GetMapping("/higher/{userId}/{periodValue}")
+    @GetMapping(URI_SCORES_LOWER + "/{userId}/{periodValue}")
     public ListDto<OverwatchUserScore> getLowerThanUser(
             @PathVariable String userId,
             @PathVariable Integer periodValue,

@@ -112,6 +112,13 @@ public class OverwatchVerdictControllerIT extends BaseControllerIT {
                 .andExpect(jsonPath("$.entries[0].userId", is(userId)));
     }
 
+    @Test
+    public void testGetMaps_Success() throws Exception {
+        doGet(OverwatchVerdictController.URI_BASE + OverwatchVerdictController.URI_MAPS)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.count", is(CSGOMap.values().length)));
+    }
+
     private OverwatchVerdict createVerdict() {
         return new OverwatchVerdict()
                 .setMap(CSGOMap.de_cobblestone)

@@ -8,6 +8,8 @@ import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.rest.dto.LoginDto;
 import com.dwalldorf.owbackend.rest.dto.UserDto;
 import com.dwalldorf.owbackend.service.UserService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,31 +37,27 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> register(@RequestBody UserDto userDto) {
-        User user = new User();
-        user.getUserProperties()
-            .setUsername(userDto.getUsername())
-            .setEmail(userDto.getEmail())
-            .setPassword(userDto.getPassword());
+    public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
+        User user = UserDto.toUser(userDto);
 
-        User persistedUser = userService.register(user);
-        return new ResponseEntity<>(persistedUser, HttpStatus.CREATED);
+        userDto = UserDto.fromUser(userService.register(user));
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
     @PostMapping(URI_LOGIN)
-    public ResponseEntity<User> login(@RequestBody LoginDto loginDto) throws InvalidInputException {
+    public ResponseEntity<UserDto> login(@RequestBody LoginDto loginDto) throws InvalidInputException {
         User loginUser = userService.login(loginDto.getUsername(), loginDto.getPassword());
         if (loginUser == null) {
             throw new InvalidInputException();
         }
 
-        return new ResponseEntity<>(loginUser, HttpStatus.OK);
+        return new ResponseEntity<>(UserDto.fromUser(loginUser), HttpStatus.OK);
     }
 
     @GetMapping(URI_ME)
     @RequireLogin
-    public User getMe() {
-        return userService.getCurrentUser();
+    public UserDto getMe() {
+        return UserDto.fromUser(userService.getCurrentUser());
     }
 
     @PostMapping(URI_LOGOUT)
@@ -71,7 +69,11 @@ public class UserController {
 
     @GetMapping
     @RequireAdmin
-    public ListDto<User> getAllUsers() {
-        return new ListDto<>(userService.getUsers());
+    public ListDto<UserDto> getAllUsers() {
+        List<UserDto> retVal = new ArrayList<>();
+        userService.getUsers()
+                   .forEach(user -> retVal.add(UserDto.fromUser(user)));
+
+        return new ListDto<>(retVal);
     }
 }
