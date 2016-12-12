@@ -13,7 +13,7 @@ import org.mockito.InjectMocks;
 
 public class PasswordServiceTest extends BaseTest {
 
-    private final static int ITERATIONS = 100;
+    private final static int ITERATIONS = 20;
 
     @InjectMocks
     private PasswordService passwordService;
@@ -50,7 +50,6 @@ public class PasswordServiceTest extends BaseTest {
     public void testIsExpectedPassword() {
         final String PASSWORD = "fsaHJSSAusdj12dDS*d7/dsa-DSpqsutvDIl";
         final byte[] SALT = passwordService.createSalt();
-
 
         Set<byte[]> hashes = new HashSet<>();
         for (int i = 0; i < ITERATIONS; i++) {

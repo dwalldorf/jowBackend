@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.it;
 
+import com.dwalldorf.owbackend.Application;
 import com.dwalldorf.owbackend.config.AppConfiguration;
 import com.dwalldorf.owbackend.config.MongoConfiguration;
 import com.dwalldorf.owbackend.config.RabbitmqConfiguration;
@@ -47,10 +48,8 @@ import org.springframework.mock.web.MockHttpSession;
         OverwatchScoreWorker.class
 }, scanBasePackages = {"com.dwalldorf.owbackend"})
 @PropertySource("classpath:application.properties")
-@Profile({TestConfiguration.INTEGRATION_TEST_PROFILE})
+@Profile({Application.PROFILE_INTEGRATION_TEST})
 public class TestConfiguration {
-
-    public final static String INTEGRATION_TEST_PROFILE = "integration-test";
 
     @Bean
     @Primary

@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.config;
 
+import com.dwalldorf.owbackend.Application;
 import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"default", "dev"})
+@Profile(Application.PROFILE_INTEGRATION_TEST_EXCLUDE)
 public class RabbitmqConfiguration {
 
     @Value("${amqp.host}")

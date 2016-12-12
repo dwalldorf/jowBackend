@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class OverwatchVerdictService {
 
-    private UserService userService;
+    private final UserService userService;
 
-    private OverwatchVerdictRepository verdictRepository;
+    private final OverwatchVerdictRepository verdictRepository;
 
     @Inject
     public OverwatchVerdictService(UserService userService, OverwatchVerdictRepository verdictRepository) {

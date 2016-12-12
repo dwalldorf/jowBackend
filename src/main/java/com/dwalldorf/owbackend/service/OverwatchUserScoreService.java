@@ -47,9 +47,9 @@ public class OverwatchUserScoreService {
             "    return sum;" +
             "}";
 
-    private MongoClient mongoClient;
+    private final MongoClient mongoClient;
 
-    private OverwatchUserScoreRepository scoreRepository;
+    private final OverwatchUserScoreRepository scoreRepository;
 
     @Value("${mongo.db}")
     private String dbName;

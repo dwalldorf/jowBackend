@@ -3,7 +3,7 @@
 <configuration>
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [${HOSTNAME}] [%thread] %level %logger{36}@%method:%line - %msg%n
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %level %logger{36}@%method:%line - %msg%n
             </pattern>
         </encoder>
     </appender>
@@ -11,24 +11,18 @@
     <appender name="elastic" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
         <url>http://localhost:9200/_bulk</url>
         <index>owbackend-%date{yyyy-MM-dd}</index>
-        <type>tester</type>
-        <loggerName>es-logger</loggerName> <!-- optional -->
-        <errorLoggerName>es-error-logger</errorLoggerName> <!-- optional -->
+        <type>elasticAppender</type>
         <connectTimeout>30000</connectTimeout> <!-- optional (in ms, default 30000) -->
-        <errorsToStderr>false</errorsToStderr> <!-- optional (default false) -->
-        <includeCallerData>false</includeCallerData> <!-- optional (default false) -->
-        <logsToStderr>false</logsToStderr> <!-- optional (default false) -->
-        <maxQueueSize>104857600</maxQueueSize> <!-- optional (default 104857600) -->
-        <maxRetries>3</maxRetries> <!-- optional (default 3) -->
-        <readTimeout>30000</readTimeout> <!-- optional (in ms, default 30000) -->
-        <sleepTime>250</sleepTime> <!-- optional (in ms, default 250) -->
-        <rawJsonMessage>false</rawJsonMessage> <!-- optional (default false) -->
-        <authentication class="com.internetitem.logback.elasticsearch.config.BasicAuthentication"/> <!-- optional -->
+        <maxRetries>5</maxRetries> <!-- optional (default 3) -->
         <properties>
             <property>
                 <name>host</name>
-                <value>localhost</value>
+                <value>${HOSTNAME}</value>
                 <allowEmpty>false</allowEmpty>
+            </property>
+            <property>
+                <name>active-profiles</name>
+                <value>${spring.profiles.active}</value>
             </property>
             <property>
                 <name>severity</name>

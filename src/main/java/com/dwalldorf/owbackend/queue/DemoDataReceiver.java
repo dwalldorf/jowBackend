@@ -19,11 +19,11 @@ public class DemoDataReceiver implements MessageListener {
     @Log
     private Logger logger;
 
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
-    private DemoService demoService;
+    private final DemoService demoService;
 
-    private DemoFileService demoFileService;
+    private final DemoFileService demoFileService;
 
     @Inject
     public DemoDataReceiver(ObjectMapper objectMapper, DemoService demoService, DemoFileService demoFileService) {

@@ -24,11 +24,15 @@ public class DemoFileService {
     @Value("${app.demo.upload.dest}")
     private String uploadDirectory;
 
-    @Inject
-    private DemoFileRepository demoFileRepository;
+    private final DemoFileRepository demoFileRepository;
+
+    private final UserService userService;
 
     @Inject
-    private UserService userService;
+    public DemoFileService(DemoFileRepository demoFileRepository, UserService userService) {
+        this.demoFileRepository = demoFileRepository;
+        this.userService = userService;
+    }
 
     public DemoFile findById(final String id) {
         return demoFileRepository.findOne(id);

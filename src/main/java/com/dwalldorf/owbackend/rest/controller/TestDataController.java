@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.rest.controller;
 
+import com.dwalldorf.owbackend.Application;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.OverwatchVerdictRepository;
@@ -17,19 +18,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/_test_data")
-@Profile("dev")
+@RequestMapping(TestDataController.URI)
+@Profile(Application.PROFILE_DEV)
 public class TestDataController {
 
-    private UserService userService;
+    public static final String URI = "/_test_data";
 
-    private UserStub userStub;
+    private final UserService userService;
 
-    private OverwatchVerdictStub verdictStub;
+    private final UserStub userStub;
 
-    private OverwatchVerdictRepository verdictRepository;
+    private final OverwatchVerdictStub verdictStub;
 
-    private RandomUtil randomUtil;
+    private final OverwatchVerdictRepository verdictRepository;
+
+    private final RandomUtil randomUtil;
 
     @Inject
     public TestDataController(

@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.dwalldorf.owbackend.it.BaseControllerIT;
+import com.dwalldorf.owbackend.rest.controller.VersionController;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -15,7 +16,7 @@ public class VersionControllerIT extends BaseControllerIT {
 
     @Test
     public void testGetVersion_Success() throws Exception {
-        doGet("/version")
+        doGet(VersionController.URI)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.version", is(version)));
     }

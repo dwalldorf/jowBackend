@@ -14,6 +14,10 @@ public class Application {
 
     public final static Marker appInfoMarker = MarkerFactory.getMarker("appInfo");
 
+    public static final String PROFILE_DEV = "dev";
+    public static final String PROFILE_INTEGRATION_TEST = "integration-test";
+    public static final String PROFILE_INTEGRATION_TEST_EXCLUDE = "!" + PROFILE_INTEGRATION_TEST;
+
     public static void main(String args[]) {
         SpringApplication.run(Application.class, args);
     }

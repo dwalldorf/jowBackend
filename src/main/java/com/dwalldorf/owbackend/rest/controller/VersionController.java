@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/version")
+@RequestMapping(VersionController.URI)
 public class VersionController {
+
+    public static final String URI = "/version";
 
     @Value("${app.version}")
     private String version;

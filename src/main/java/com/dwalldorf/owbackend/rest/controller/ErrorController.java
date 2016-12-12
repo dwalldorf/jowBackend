@@ -24,7 +24,7 @@ public class ErrorController {
     @Log
     private Logger logger;
 
-    private UserService userService;
+    private final UserService userService;
 
     @Inject
     public ErrorController(UserService userService) {

@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/demos")
+@RequestMapping(DemoController.URI)
 public class DemoController {
 
-    private UserService userService;
+    public static final String URI = "/demos";
 
-    private DemoService demoService;
+    private final UserService userService;
+
+    private final DemoService demoService;
 
     @Inject
     public DemoController(UserService userService, DemoService demoService) {

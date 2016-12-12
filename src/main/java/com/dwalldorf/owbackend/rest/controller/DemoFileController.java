@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/demofiles")
+@RequestMapping(DemoFileController.URI)
 public class DemoFileController {
 
-    private DemoFileService demoFileService;
+    public static final String URI = "/demofiles";
 
-    private DemoTaskProducer demoTaskProducer;
+    private final DemoFileService demoFileService;
+
+    private final DemoTaskProducer demoTaskProducer;
 
     @Inject
     public DemoFileController(DemoFileService demoFileService, DemoTaskProducer demoTaskProducer) {

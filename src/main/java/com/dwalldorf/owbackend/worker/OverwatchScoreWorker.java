@@ -22,9 +22,9 @@ public class OverwatchScoreWorker {
     @Log
     private Logger logger;
 
-    private OverwatchUserScoreService scoreService;
+    private final OverwatchUserScoreService scoreService;
 
-    private OverwatchVerdictService verdictService;
+    private final OverwatchVerdictService verdictService;
 
     @Inject
     public OverwatchScoreWorker(OverwatchUserScoreService scoreService, OverwatchVerdictService verdictService) {

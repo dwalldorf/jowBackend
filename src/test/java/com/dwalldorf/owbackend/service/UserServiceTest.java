@@ -15,12 +15,9 @@ import com.dwalldorf.owbackend.repository.UserRepository;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
-import org.slf4j.Logger;
 
 public class UserServiceTest extends BaseTest {
 
@@ -36,19 +33,17 @@ public class UserServiceTest extends BaseTest {
     private UserRepository userRepository;
 
     @Mock
-    private Logger logger;
-
-    @Mock
     private HttpSession httpSession;
 
     @Spy
     private PasswordService passwordService;
 
-    @InjectMocks
     private UserService userService;
 
-    public UserServiceTest() {
-        MockitoAnnotations.initMocks(this);
+    @Override
+    protected void afterSetup() {
+        this.userService = new UserService(userRepository, httpSession, passwordService);
+        mockLogger(this.userService);
     }
 
     @Test
@@ -81,10 +76,10 @@ public class UserServiceTest extends BaseTest {
     @Test(expected = InvalidInputException.class)
     public void testRegister_EmailExists() throws Exception {
         final String email = "test@example.com";
-        User user = new User();
-        user.setEmail(email);
+        User user = new User()
+                .setEmail(email);
 
-        when(userRepository.findByUsernameOrEmail(anyString(), eq(email))).thenReturn(new User());
+        when(userRepository.findByUsernameOrEmail(anyString(), anyString())).thenReturn(new User());
 
         userService.register(user);
     }

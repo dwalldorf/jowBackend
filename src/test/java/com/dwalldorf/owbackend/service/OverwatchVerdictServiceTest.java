@@ -4,16 +4,15 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
+import com.dwalldorf.owbackend.BaseTest;
 import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.OverwatchVerdictRepository;
 import com.dwalldorf.owbackend.stub.UserStub;
-import com.dwalldorf.owbackend.BaseTest;
 import com.dwalldorf.owbackend.util.RandomUtil;
 import java.util.Date;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 
@@ -25,14 +24,19 @@ public class OverwatchVerdictServiceTest extends BaseTest {
     @Mock
     private UserService userService;
 
-    @InjectMocks
     private OverwatchVerdictService verdictService;
 
     private UserStub userStub = new UserStub(new RandomUtil());
 
+    @Override
+    protected void afterSetup() {
+        this.verdictService = new OverwatchVerdictService(userService, verdictRepository);
+    }
+
     @Test
     public void saveSetUserId() throws Exception {
         User currentUserMock = userStub.createUser();
+
         when(userService.getCurrentUser()).thenReturn(currentUserMock);
         OverwatchVerdict verdictMock = Mockito.mock(OverwatchVerdict.class);
 

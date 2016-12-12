@@ -16,7 +16,7 @@ public class PasswordService {
     private final static int ITERATIONS = 10000;
     private final static int KEY_LENGTH = 256;
 
-    private SecretKeyFactory keyFactory;
+    private final SecretKeyFactory keyFactory;
 
     public PasswordService() throws NoSuchAlgorithmException {
         keyFactory = SecretKeyFactory.getInstance(ALGORITHM);

@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/overwatch/verdicts")
+@RequestMapping(OverwatchVerdictController.URI)
 public class OverwatchVerdictController {
+
+    public static final String URI = "/overwatch/verdicts";
 
     private OverwatchVerdictService verdictService;
 
-    private UserService userService;
+    private final UserService userService;
 
     @Inject
     public OverwatchVerdictController(OverwatchVerdictService verdictService, UserService userService) {

@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.dwalldorf.owbackend.it.BaseControllerIT;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.model.UserSettings;
+import com.dwalldorf.owbackend.rest.controller.UserController;
 import com.dwalldorf.owbackend.rest.dto.LoginDto;
 import com.dwalldorf.owbackend.service.UserService;
 import java.util.Arrays;
@@ -20,6 +21,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 public class UserControllerIT extends BaseControllerIT {
 
+    private final static String URI = UserController.URI_BASE;
+    private final static String URI_ME = URI + UserController.URI_ME;
+    private final static String URI_LOGIN = URI + UserController.URI_LOGIN;
+    private final static String URI_LOGOUT = URI + UserController.URI_LOGOUT;
+
     @MockBean
     private UserService userServiceMock;
 
@@ -27,7 +33,7 @@ public class UserControllerIT extends BaseControllerIT {
     public void testGetMe_NotLoggedIn() throws Exception {
         when(userServiceMock.getCurrentUser()).thenReturn(null);
 
-        mockMvc.perform(get("/users/me"))
+        mockMvc.perform(get(URI_ME))
                .andExpect(status().isNotFound());
     }
 
@@ -36,7 +42,7 @@ public class UserControllerIT extends BaseControllerIT {
         User user = createUser();
         when(userServiceMock.getCurrentUser()).thenReturn(user);
 
-        doGet("/users/me")
+        doGet(URI_ME)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
                 .andExpect(jsonPath("$.username", is(user.getUsername())))
@@ -51,7 +57,7 @@ public class UserControllerIT extends BaseControllerIT {
         loginDto.setUsername("username");
         loginDto.setPassword("password");
 
-        doPost("/users/login", loginDto)
+        doPost(URI_LOGIN, loginDto)
                 .andExpect(status().isBadRequest());
     }
 
@@ -62,7 +68,7 @@ public class UserControllerIT extends BaseControllerIT {
 
         when(userServiceMock.login(loginDto.getUsername(), loginDto.getPassword())).thenReturn(user);
 
-        doPost("/users/login", loginDto)
+        doPost(URI_LOGIN, loginDto)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(user.getId())))
                 .andExpect(jsonPath("$.username", is(user.getUsername())));
@@ -71,7 +77,7 @@ public class UserControllerIT extends BaseControllerIT {
     @Test
     public void testLogout_NotLoggedIn() throws Exception {
         when(userServiceMock.getCurrentUser()).thenReturn(null);
-        doPost("/users/logout")
+        doPost(URI_LOGOUT)
                 .andExpect(status().isNotFound());
     }
 
@@ -80,7 +86,7 @@ public class UserControllerIT extends BaseControllerIT {
         User user = createUser();
         when(userServiceMock.getCurrentUser()).thenReturn(user);
 
-        doPost("/users/logout")
+        doPost(URI_LOGOUT)
                 .andExpect(status().isOk());
     }
 
@@ -88,7 +94,7 @@ public class UserControllerIT extends BaseControllerIT {
     public void testGetAllUsers_NotLoggedIn() throws Exception {
         when(userServiceMock.getCurrentUser()).thenReturn(null);
 
-        doGet("/users")
+        doGet(URI)
                 .andExpect(status().isNotFound());
     }
 
@@ -97,7 +103,7 @@ public class UserControllerIT extends BaseControllerIT {
         User user = createUser();
         when(userServiceMock.getCurrentUser()).thenReturn(user);
 
-        doGet("/users")
+        doGet(URI)
                 .andExpect(status().isNotFound());
     }
 
@@ -111,7 +117,7 @@ public class UserControllerIT extends BaseControllerIT {
         when(userServiceMock.getCurrentUser()).thenReturn(user);
         when(userServiceMock.getUsers()).thenReturn(Arrays.asList(user, someOtherUser));
 
-        doGet("/users")
+        doGet(URI)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", IsCollectionWithSize.hasSize(2)));
     }

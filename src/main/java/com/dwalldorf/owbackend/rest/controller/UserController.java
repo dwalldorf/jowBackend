@@ -17,10 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping(UserController.URI_BASE)
 public class UserController {
 
-    private UserService userService;
+    public static final String URI_BASE = "/users";
+
+    public static final String URI_LOGIN = "/login";
+    public static final String URI_ME = "/me";
+    public static final String URI_LOGOUT = "/logout";
+
+    private final UserService userService;
 
     @Inject
     public UserController(UserService userService) {
@@ -33,7 +39,7 @@ public class UserController {
         return new ResponseEntity<>(persistedUser, HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping(URI_LOGIN)
     public ResponseEntity<User> login(@RequestBody LoginDto loginDto) throws InvalidInputException {
         User loginUser = userService.login(loginDto.getUsername(), loginDto.getPassword());
         if (loginUser == null) {
@@ -43,13 +49,13 @@ public class UserController {
         return new ResponseEntity<>(loginUser, HttpStatus.OK);
     }
 
-    @GetMapping("/me")
+    @GetMapping(URI_ME)
     @RequireLogin
     public User getMe() {
         return userService.getCurrentUser();
     }
 
-    @PostMapping("/logout")
+    @PostMapping(URI_LOGOUT)
     @RequireLogin
     public ResponseEntity logout() {
         userService.logout();

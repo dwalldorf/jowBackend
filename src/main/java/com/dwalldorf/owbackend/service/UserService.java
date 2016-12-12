@@ -20,11 +20,11 @@ public class UserService {
     @Log
     private Logger logger;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private HttpSession httpSession;
+    private final HttpSession httpSession;
 
-    private PasswordService passwordService;
+    private final PasswordService passwordService;
 
     @Inject
     public UserService(UserRepository userRepository, HttpSession httpSession, PasswordService passwordService) {

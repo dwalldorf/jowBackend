@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class DemoService {
 
-    private DemoRepository demoRepository;
+    private final DemoRepository demoRepository;
 
     @Inject
     public DemoService(DemoRepository demoRepository) {

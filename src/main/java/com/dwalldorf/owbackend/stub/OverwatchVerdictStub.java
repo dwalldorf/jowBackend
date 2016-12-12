@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OverwatchVerdictStub {
 
-    private RandomUtil randomUtil;
+    private final RandomUtil randomUtil;
 
     @Inject
     public OverwatchVerdictStub(RandomUtil randomUtil) {

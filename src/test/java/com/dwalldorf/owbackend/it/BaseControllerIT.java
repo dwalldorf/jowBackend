@@ -28,8 +28,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = {Application.class, TestConfiguration.class})
-@ActiveProfiles({TestConfiguration.INTEGRATION_TEST_PROFILE})
+@ContextConfiguration(classes = TestConfiguration.class)
+@ActiveProfiles({Application.PROFILE_INTEGRATION_TEST})
 public abstract class BaseControllerIT {
 
     private final static MediaType CONTENT_TYPE = MediaType.APPLICATION_JSON;

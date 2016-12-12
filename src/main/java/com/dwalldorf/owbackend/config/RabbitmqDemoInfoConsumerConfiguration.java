@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.config;
 
+import com.dwalldorf.owbackend.Application;
 import com.dwalldorf.owbackend.queue.DemoDataReceiver;
 import javax.inject.Inject;
 import org.springframework.amqp.core.Queue;
@@ -12,13 +13,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile({"default", "dev"})
+@Profile(Application.PROFILE_INTEGRATION_TEST_EXCLUDE)
 public class RabbitmqDemoInfoConsumerConfiguration extends RabbitmqConfiguration {
 
     @Value("${amqp.queues.analyze}")
     private String queue;
 
-    private DemoDataReceiver demoDataReceiver;
+    private final DemoDataReceiver demoDataReceiver;
 
     @Inject
     public RabbitmqDemoInfoConsumerConfiguration(DemoDataReceiver demoDataReceiver) {
