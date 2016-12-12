@@ -1,10 +1,11 @@
 package com.dwalldorf.owbackend.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = OverwatchVerdict.COLLECTION_NAME)
-public class OverwatchVerdict {
+public class OverwatchVerdict implements Serializable {
 
     public final static String COLLECTION_NAME = "verdicts";
 

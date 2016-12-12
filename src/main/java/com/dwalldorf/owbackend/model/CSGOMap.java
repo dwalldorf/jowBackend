@@ -1,6 +1,8 @@
 package com.dwalldorf.owbackend.model;
 
-public enum CSGOMap {
+import java.io.Serializable;
+
+public enum CSGOMap implements Serializable {
     de_dust2("de_dust2"),
     de_cobblestone("de_cobblestone"),
     de_cache("de_cache"),

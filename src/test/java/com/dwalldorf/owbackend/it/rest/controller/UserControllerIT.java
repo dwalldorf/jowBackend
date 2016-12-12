@@ -119,7 +119,8 @@ public class UserControllerIT extends BaseControllerIT {
 
         doGet(URI)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", IsCollectionWithSize.hasSize(2)));
+                .andExpect(jsonPath("$.count", is(2)))
+                .andExpect(jsonPath("$.entries", IsCollectionWithSize.hasSize(2)));
     }
 
     private User createUser() {

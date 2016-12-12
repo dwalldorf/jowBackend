@@ -2,13 +2,14 @@ package com.dwalldorf.owbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import org.mongodb.morphia.annotations.Embedded;
 
 @Embedded
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DemoEvent {
+public class DemoEvent implements Serializable {
 
     private int eventId;
 

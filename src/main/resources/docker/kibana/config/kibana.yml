@@ -62,7 +62,7 @@ elasticsearch.url: "http://elasticsearch:9200"
 # elasticsearch.requestTimeout: 30000
 
 # List of Kibana client-side headers to send to Elasticsearch. To send *no* client-side
-# headers, set this value to [] (an empty list).
+# headers, set this value to [] (an empty entries).
 # elasticsearch.requestHeadersWhitelist: [ authorization ]
 
 # Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable.

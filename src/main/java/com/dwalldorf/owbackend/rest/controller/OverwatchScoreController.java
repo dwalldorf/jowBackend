@@ -5,6 +5,7 @@ import com.dwalldorf.owbackend.model.OverwatchUserScore;
 import com.dwalldorf.owbackend.model.OverwatchUserScore.Period;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.model.internal.PaginationInfo;
+import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.service.OverwatchUserScoreService;
 import com.dwalldorf.owbackend.service.UserService;
 import java.util.List;
@@ -42,31 +43,35 @@ public class OverwatchScoreController {
     }
 
     @GetMapping("/lower/{userId}/{periodValue}")
-    public List<OverwatchUserScore> getHigherThanUser(
+    public ListDto<OverwatchUserScore> getHigherThanUser(
             @PathVariable String userId,
             @PathVariable Integer periodValue,
-            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
 
         Period period = getPeriod(periodValue);
         User user = getUser(userId);
 
-        PaginationInfo paginationInfo = new PaginationInfo(offset, limit);
-        return scoreService.findByHigherThanUser(user, period, paginationInfo);
+        PaginationInfo paginationInfo = new PaginationInfo(page, limit);
+        List<OverwatchUserScore> scores = scoreService.findByHigherThanUser(user, period, paginationInfo);
+
+        return new ListDto<>(scores);
     }
 
     @GetMapping("/higher/{userId}/{periodValue}")
-    public List<OverwatchUserScore> getLowerThanUser(
+    public ListDto<OverwatchUserScore> getLowerThanUser(
             @PathVariable String userId,
             @PathVariable Integer periodValue,
-            @RequestParam(value = "offset", required = false) Integer offset,
+            @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
 
         Period period = getPeriod(periodValue);
         User user = getUser(userId);
 
-        PaginationInfo paginationInfo = new PaginationInfo(offset, limit);
-        return scoreService.findByLowerThanUser(user, period, paginationInfo);
+        PaginationInfo paginationInfo = new PaginationInfo(page, limit);
+        List<OverwatchUserScore> scores = scoreService.findByLowerThanUser(user, period, paginationInfo);
+
+        return new ListDto<>(scores);
     }
 
     private Period getPeriod(final Integer periodValue) throws NotFoundException {

@@ -26,10 +26,13 @@ public class OverwatchScoreWorker {
 
     private final OverwatchVerdictService verdictService;
 
+    private final StopWatch stopWatch;
+
     @Inject
-    public OverwatchScoreWorker(OverwatchUserScoreService scoreService, OverwatchVerdictService verdictService) {
+    public OverwatchScoreWorker(OverwatchUserScoreService scoreService, OverwatchVerdictService verdictService, StopWatch stopWatch) {
         this.scoreService = scoreService;
         this.verdictService = verdictService;
+        this.stopWatch = stopWatch;
     }
 
     @Scheduled(fixedDelay = (5 * 1000))
@@ -48,7 +51,6 @@ public class OverwatchScoreWorker {
     }
 
     private void processUserScores(final Period period) {
-        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
         boolean processScoresFlag = false;

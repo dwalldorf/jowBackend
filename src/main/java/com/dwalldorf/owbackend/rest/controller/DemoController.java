@@ -3,6 +3,7 @@ package com.dwalldorf.owbackend.rest.controller;
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.model.Demo;
 import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.service.DemoService;
 import com.dwalldorf.owbackend.service.UserService;
 import java.util.List;
@@ -31,10 +32,10 @@ public class DemoController {
 
     @GetMapping
     @RequireLogin
-    public ResponseEntity<List<Demo>> getDemosByUser() {
+    public ResponseEntity<ListDto<Demo>> getDemosByUser() {
         User currentUser = userService.getCurrentUser();
         List<Demo> demos = demoService.findByUser(currentUser);
 
-        return new ResponseEntity<>(demos, HttpStatus.OK);
+        return new ResponseEntity<>(new ListDto<>(demos), HttpStatus.OK);
     }
 }

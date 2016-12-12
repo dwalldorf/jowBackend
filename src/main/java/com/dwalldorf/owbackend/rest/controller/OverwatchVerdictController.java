@@ -3,11 +3,13 @@ package com.dwalldorf.owbackend.rest.controller;
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.exception.NotFoundException;
+import com.dwalldorf.owbackend.model.CSGOMap;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.service.OverwatchVerdictService;
 import com.dwalldorf.owbackend.service.UserService;
-import java.util.List;
+import java.util.Arrays;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -43,12 +45,17 @@ public class OverwatchVerdictController {
 
     @GetMapping("/{userId}")
     @RequireLogin
-    public List<OverwatchVerdict> getUserVerdicts(@PathVariable String userId) {
+    public ListDto<OverwatchVerdict> getUserVerdicts(@PathVariable String userId) {
         User user = userService.findById(userId);
         if (user == null) {
             throw new NotFoundException("No such user: " + userId);
         }
 
-        return verdictService.findByUser(user);
+        return new ListDto<>(verdictService.findByUser(user));
+    }
+
+    @GetMapping("/maps")
+    public ListDto<CSGOMap> getMaps() {
+        return new ListDto<>(Arrays.asList(CSGOMap.values()));
     }
 }

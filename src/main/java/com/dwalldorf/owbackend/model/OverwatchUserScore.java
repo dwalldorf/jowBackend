@@ -2,6 +2,7 @@ package com.dwalldorf.owbackend.model;
 
 import static org.springframework.data.mongodb.core.index.IndexDirection.ASCENDING;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
@@ -11,7 +12,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = OverwatchUserScore.COLLECTION_NAME)
-public class OverwatchUserScore {
+public class OverwatchUserScore implements Serializable {
 
     public final static String COLLECTION_NAME = "overwatch_scores";
 

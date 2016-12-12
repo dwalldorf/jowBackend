@@ -5,44 +5,55 @@ import org.springframework.data.domain.Pageable;
 
 public class PaginationInfo {
 
-    private final static int DEFAULT_OFFSET = 0;
-    private final static int DEFAULT_LIMIT = 10;
+    public final static Integer PAGE_DEFAULT = 1;
+    public final static Integer LIMIT_DEFAULT = 10;
+    public final static Integer LIMIT_MAX = 100;
 
-    private Integer offset;
+    private Integer page;
 
     private Integer limit;
 
-    public PaginationInfo(Integer offset, Integer limit) {
-        if (offset == null) {
-            this.offset = DEFAULT_OFFSET;
+    public PaginationInfo(Integer page, Integer limit) {
+        setPage(page);
+        setLimit(limit);
+    }
+
+    public PaginationInfo() {
+        this(null, null);
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public PaginationInfo setPage(Integer page) {
+        if (page == null) {
+            this.page = PAGE_DEFAULT;
         } else {
-            this.offset = offset;
+            this.page = page;
         }
 
-        if (limit == null) {
-            this.limit = DEFAULT_LIMIT;
-        } else {
-            this.limit = limit;
-        }
+        return this;
     }
 
-    public int getOffset() {
-        return offset;
-    }
-
-    public void setOffset(int offset) {
-        this.offset = offset;
-    }
-
-    public int getLimit() {
+    public Integer getLimit() {
         return limit;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public PaginationInfo setLimit(Integer limit) {
+        if (limit == null || limit == 0) {
+            this.limit = LIMIT_DEFAULT;
+        } else {
+            if (limit > LIMIT_MAX) {
+                this.limit = LIMIT_MAX;
+            } else {
+                this.limit = limit;
+            }
+        }
+        return this;
     }
 
     public Pageable toPageable() {
-        return new PageRequest(this.offset, this.limit);
+        return new PageRequest(this.page, this.limit);
     }
 }

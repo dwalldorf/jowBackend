@@ -4,9 +4,9 @@ import com.dwalldorf.owbackend.annotation.RequireAdmin;
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
+import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.rest.dto.LoginDto;
 import com.dwalldorf.owbackend.service.UserService;
-import java.util.List;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +64,7 @@ public class UserController {
 
     @GetMapping
     @RequireAdmin
-    public List<User> getAllUsers() {
-        return userService.getUsers();
+    public ListDto<User> getAllUsers() {
+        return new ListDto<>(userService.getUsers());
     }
 }

@@ -1,12 +1,17 @@
 package com.dwalldorf.owbackend;
 
-import com.dwalldorf.owbackend.annotation.RequireRoleInvocationHandlerTest;
+import com.dwalldorf.owbackend.annotation.LoggerInjectorTest;
+import com.dwalldorf.owbackend.annotation.RequireAdminTest;
+import com.dwalldorf.owbackend.annotation.RequireLoginTest;
+import com.dwalldorf.owbackend.model.internal.PaginationInfoTest;
 import com.dwalldorf.owbackend.rest.controller.DemoFileControllerTest;
 import com.dwalldorf.owbackend.rest.controller.OverwatchVerdictControllerTest;
 import com.dwalldorf.owbackend.rest.controller.UserControllerTest;
 import com.dwalldorf.owbackend.service.DemoFileServiceTest;
+import com.dwalldorf.owbackend.service.OverwatchUserScoreServiceTest;
 import com.dwalldorf.owbackend.service.OverwatchVerdictServiceTest;
 import com.dwalldorf.owbackend.service.PasswordServiceTest;
+import com.dwalldorf.owbackend.service.StopWatchTest;
 import com.dwalldorf.owbackend.service.UserServiceTest;
 import com.dwalldorf.owbackend.util.RandomUtilTest;
 import com.dwalldorf.owbackend.worker.OverwatchScoreWorkerTest;
@@ -15,15 +20,21 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        RequireRoleInvocationHandlerTest.class,
+        LoggerInjectorTest.class,
+        RequireAdminTest.class,
+        RequireLoginTest.class,
+
+        PaginationInfoTest.class,
 
         DemoFileControllerTest.class,
         OverwatchVerdictControllerTest.class,
         UserControllerTest.class,
 
         DemoFileServiceTest.class,
+        OverwatchUserScoreServiceTest.class,
         OverwatchVerdictServiceTest.class,
         PasswordServiceTest.class,
+        StopWatchTest.class,
         UserServiceTest.class,
 
         RandomUtilTest.class,
