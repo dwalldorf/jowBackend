@@ -8,6 +8,8 @@
         </encoder>
     </appender>
 
+    <logger name="com.dwalldorf.owbackend" level="DEBUG"/>
+
     <root level="INFO">
         <appender-ref ref="console"/>
     </root>

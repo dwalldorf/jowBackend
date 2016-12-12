@@ -24,7 +24,7 @@ public class DemoFileServiceTest extends BaseTest {
 
     private DemoFileService demoFileService;
 
-    private UserStub userStub = new UserStub(new RandomUtil());
+    private final UserStub userStub = new UserStub(new RandomUtil());
 
     @Override
     protected void afterSetup() {

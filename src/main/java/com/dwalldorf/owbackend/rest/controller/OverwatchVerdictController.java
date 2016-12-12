@@ -22,10 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(OverwatchVerdictController.URI)
+@RequestMapping(OverwatchVerdictController.URI_BASE)
 public class OverwatchVerdictController {
 
-    public static final String URI = "/overwatch/verdicts";
+    public static final String URI_BASE = "/overwatch";
+    public static final String URI_VERDICTS = "/verdicts";
 
     private OverwatchVerdictService verdictService;
 
@@ -37,13 +38,13 @@ public class OverwatchVerdictController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping(URI_VERDICTS)
     @RequireLogin
     public ResponseEntity<OverwatchVerdict> postVerdict(@RequestBody @Valid OverwatchVerdict verdict) throws LoginRequiredException {
         return new ResponseEntity<>(verdictService.save(verdict), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(URI_VERDICTS + "/{userId}")
     @RequireLogin
     public ListDto<OverwatchVerdict> getUserVerdicts(@PathVariable String userId) {
         User user = userService.findById(userId);

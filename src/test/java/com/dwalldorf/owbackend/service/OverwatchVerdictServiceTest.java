@@ -26,7 +26,7 @@ public class OverwatchVerdictServiceTest extends BaseTest {
 
     private OverwatchVerdictService verdictService;
 
-    private UserStub userStub = new UserStub(new RandomUtil());
+    private final UserStub userStub = new UserStub(new RandomUtil());
 
     @Override
     protected void afterSetup() {

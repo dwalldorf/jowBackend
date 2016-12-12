@@ -19,7 +19,7 @@ public class RequireLoginTest extends BaseTest {
     @InjectMocks
     private RequireRoleInvocationHandler roleInvocationHandler;
 
-    private UserStub userStub = new UserStub(new RandomUtil());
+    private final UserStub userStub = new UserStub(new RandomUtil());
 
     @Test(expected = LoginRequiredException.class)
     public void testCheckLoginBefore_LoginRequiredException() throws Exception {

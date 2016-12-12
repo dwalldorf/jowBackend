@@ -2,6 +2,8 @@ package com.dwalldorf.owbackend.it;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import com.dwalldorf.owbackend.Application;
 import com.dwalldorf.owbackend.repository.DemoFileRepository;
@@ -23,6 +25,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -31,8 +34,6 @@ import org.springframework.web.context.WebApplicationContext;
 @ContextConfiguration(classes = TestConfiguration.class)
 @ActiveProfiles({Application.PROFILE_INTEGRATION_TEST})
 public abstract class BaseControllerIT {
-
-    private final static MediaType CONTENT_TYPE = MediaType.APPLICATION_JSON;
 
     protected MockMvc mockMvc;
 
@@ -68,23 +69,39 @@ public abstract class BaseControllerIT {
     protected void afterSetup() {
     }
 
-    protected String toJsonString(Object obj) throws JsonProcessingException {
-        return mapper.writeValueAsString(obj);
+    protected ResultActions doGet(final String uri) throws Exception {
+        return prepareRequest(get(uri));
     }
 
-    protected ResultActions doGet(final String uri) throws Exception {
-        return mockMvc.perform(get(uri)
-                .accept(CONTENT_TYPE));
+    protected ResultActions doPost(final String uri, final Object body) throws Exception {
+        return prepareRequest(post(uri), body);
     }
 
     protected ResultActions doPost(final String uri) throws Exception {
         return doPost(uri, null);
     }
 
-    protected ResultActions doPost(final String uri, final Object body) throws Exception {
-        return mockMvc.perform(post(uri)
-                .contentType(CONTENT_TYPE)
-                .content(toJsonString(body))
-                .accept(CONTENT_TYPE));
+    protected ResultActions doPut(final String uri, final Object body) throws Exception {
+        return prepareRequest(put(uri), body);
+    }
+
+    private ResultActions prepareRequest(MockHttpServletRequestBuilder builder) throws Exception {
+        return prepareRequest(builder, null);
+    }
+
+    private ResultActions prepareRequest(MockHttpServletRequestBuilder builder, Object body) throws Exception {
+        builder.accept(MediaType.APPLICATION_JSON_UTF8)
+               .contentType(MediaType.APPLICATION_JSON_UTF8);
+
+        if (body != null) {
+            builder.content(toJsonString(body));
+        }
+
+        return mockMvc.perform(builder)
+                      .andDo(print());
+    }
+
+    private String toJsonString(Object obj) throws JsonProcessingException {
+        return mapper.writeValueAsString(obj);
     }
 }
