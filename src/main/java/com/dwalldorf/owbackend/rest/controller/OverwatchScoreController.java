@@ -9,7 +9,6 @@ import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.service.OverwatchUserScoreService;
 import com.dwalldorf.owbackend.service.UserService;
 import java.util.List;
-import java.util.Optional;
 import javax.inject.Inject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +40,7 @@ public class OverwatchScoreController {
             @PathVariable String userId,
             @PathVariable Integer periodValue) throws NotFoundException {
 
-        Period period = getPeriod(periodValue);
+        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
 
         return scoreService.findByUserIdAndPeriod(user, period);
@@ -54,7 +53,7 @@ public class OverwatchScoreController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
 
-        Period period = getPeriod(periodValue);
+        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
 
         PaginationInfo paginationInfo = new PaginationInfo(page, limit);
@@ -70,22 +69,13 @@ public class OverwatchScoreController {
             @RequestParam(value = "page", required = false) Integer page,
             @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
 
-        Period period = getPeriod(periodValue);
+        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
 
         PaginationInfo paginationInfo = new PaginationInfo(page, limit);
         List<OverwatchUserScore> scores = scoreService.findByLowerThanUser(user, period, paginationInfo);
 
         return new ListDto<>(scores);
-    }
-
-    private Period getPeriod(final Integer periodValue) throws NotFoundException {
-        Optional<Period> period = Period.fromInt(periodValue);
-
-        if (!period.isPresent()) {
-            throw new NotFoundException("No such period: " + periodValue);
-        }
-        return period.get();
     }
 
     private User getUser(final String userId) throws NotFoundException {

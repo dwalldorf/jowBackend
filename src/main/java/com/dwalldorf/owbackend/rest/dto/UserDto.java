@@ -28,6 +28,10 @@ public class UserDto implements Serializable {
 
     private UserSettings userSettings;
 
+    public UserDto() {
+        this.userSettings = new UserSettings();
+    }
+
     public static UserDto fromUser(User user) {
         if (user == null) {
             return null;
@@ -51,6 +55,7 @@ public class UserDto implements Serializable {
             .setUsername(userDto.getUsername())
             .setEmail(userDto.getEmail())
             .setPassword(userDto.getPassword())
+            .setRegistration(userDto.getRegistration())
             .setUserSettings(userDto.getUserSettings());
 
         return user;

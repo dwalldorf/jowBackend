@@ -2,11 +2,11 @@ package com.dwalldorf.owbackend.model;
 
 import static org.springframework.data.mongodb.core.index.IndexDirection.ASCENDING;
 
+import com.dwalldorf.owbackend.exception.NotFoundException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -49,8 +49,12 @@ public class OverwatchUserScore implements Serializable {
             this.daysBack = i;
         }
 
-        public static Optional<Period> fromInt(int periodValue) {
-            return Optional.ofNullable(MAP.get(periodValue));
+        public static Period fromInt(int periodValue) throws NotFoundException {
+            Period period = MAP.get(periodValue);
+            if (period == null) {
+                throw new NotFoundException("No such period: " + periodValue);
+            }
+            return period;
         }
 
         public int getDays() {
