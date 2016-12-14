@@ -1,6 +1,5 @@
 package com.dwalldorf.owbackend.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Size;
@@ -27,18 +26,26 @@ public class UserProperties implements Serializable {
     private String password;
 
     @NotEmpty
-    @JsonIgnore
     private byte[] hashedPassword;
 
     @NotEmpty
-    @JsonIgnore
     private byte[] salt;
 
     @NotEmpty
     private Date registration;
 
+    private Date firstLogin;
+
+    private Date lastLogin;
+
+    private boolean confirmedEmail = false;
+
     @Reference
     private UserSettings userSettings;
+
+    private boolean hasPostedVerdict = false;
+
+    private boolean hasUploadDemo = false;
 
     public UserProperties() {
         this.userSettings = new UserSettings();
@@ -113,6 +120,31 @@ public class UserProperties implements Serializable {
         return this;
     }
 
+    public Date getFirstLogin() {
+        return firstLogin;
+    }
+
+    public void setFirstLogin(Date firstLogin) {
+        this.firstLogin = firstLogin;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public boolean isConfirmedEmail() {
+        return confirmedEmail;
+    }
+
+    public UserProperties setConfirmedEmail(boolean confirmedEmail) {
+        this.confirmedEmail = confirmedEmail;
+        return this;
+    }
+
     public UserSettings getUserSettings() {
         return userSettings;
     }
@@ -122,4 +154,25 @@ public class UserProperties implements Serializable {
         return this;
     }
 
+    public boolean hasPostedVerdict() {
+        return hasPostedVerdict;
+    }
+
+    public UserProperties setHasPostedVerdict() {
+        return setHasPostedVerdict(true);
+    }
+
+    public UserProperties setHasPostedVerdict(boolean hasPostedVerdict) {
+        this.hasPostedVerdict = hasPostedVerdict;
+        return this;
+    }
+
+    public boolean hasUploadDemo() {
+        return hasUploadDemo;
+    }
+
+    public UserProperties setHasUploadDemo(boolean hasUploadDemo) {
+        this.hasUploadDemo = hasUploadDemo;
+        return this;
+    }
 }

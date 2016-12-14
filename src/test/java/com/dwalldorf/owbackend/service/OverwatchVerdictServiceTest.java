@@ -15,6 +15,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class OverwatchVerdictServiceTest extends BaseTest {
 
@@ -24,13 +25,16 @@ public class OverwatchVerdictServiceTest extends BaseTest {
     @Mock
     private UserService userService;
 
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
+
     private OverwatchVerdictService verdictService;
 
     private final UserStub userStub = new UserStub(new RandomUtil());
 
     @Override
     protected void afterSetup() {
-        this.verdictService = new OverwatchVerdictService(userService, verdictRepository);
+        this.verdictService = new OverwatchVerdictService(eventPublisher, userService, verdictRepository);
     }
 
     @Test

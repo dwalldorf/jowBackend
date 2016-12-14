@@ -26,6 +26,8 @@ public class UserDto implements Serializable {
 
     private Date registration;
 
+    private boolean confirmedEmail;
+
     private UserSettings userSettings;
 
     public UserDto() {
@@ -44,6 +46,7 @@ public class UserDto implements Serializable {
                .setUsername(properties.getUsername())
                .setEmail(properties.getEmail())
                .setRegistration(properties.getRegistration())
+               .setConfirmedEmail(properties.isConfirmedEmail())
                .setUserSettings(properties.getUserSettings());
 
         return userDto;
@@ -56,6 +59,7 @@ public class UserDto implements Serializable {
             .setEmail(userDto.getEmail())
             .setPassword(userDto.getPassword())
             .setRegistration(userDto.getRegistration())
+            .setConfirmedEmail(userDto.isConfirmedEmail())
             .setUserSettings(userDto.getUserSettings());
 
         return user;
@@ -103,6 +107,15 @@ public class UserDto implements Serializable {
 
     public UserDto setRegistration(Date registration) {
         this.registration = registration;
+        return this;
+    }
+
+    public boolean isConfirmedEmail() {
+        return confirmedEmail;
+    }
+
+    public UserDto setConfirmedEmail(boolean confirmedEmail) {
+        this.confirmedEmail = confirmedEmail;
         return this;
     }
 

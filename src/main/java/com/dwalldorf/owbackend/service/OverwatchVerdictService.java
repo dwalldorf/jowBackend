@@ -1,5 +1,6 @@
 package com.dwalldorf.owbackend.service;
 
+import com.dwalldorf.owbackend.event.user.UserPostedVerdictEvent;
 import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
@@ -7,6 +8,7 @@ import com.dwalldorf.owbackend.repository.OverwatchVerdictRepository;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,8 +18,11 @@ public class OverwatchVerdictService {
 
     private final OverwatchVerdictRepository verdictRepository;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     @Inject
-    public OverwatchVerdictService(UserService userService, OverwatchVerdictRepository verdictRepository) {
+    public OverwatchVerdictService(ApplicationEventPublisher eventPublisher, UserService userService, OverwatchVerdictRepository verdictRepository) {
+        this.eventPublisher = eventPublisher;
         this.userService = userService;
         this.verdictRepository = verdictRepository;
     }
@@ -32,7 +37,7 @@ public class OverwatchVerdictService {
         verdict.setCreationDate(new Date());
         verdict = verdictRepository.save(verdict);
 
-
+        eventPublisher.publishEvent(new UserPostedVerdictEvent(currentUser, verdict));
         return verdict;
     }
 

@@ -1,9 +1,9 @@
 package com.dwalldorf.owbackend.rest.controller;
 
 import com.dwalldorf.owbackend.Application;
-import com.dwalldorf.owbackend.model.OverwatchVerdict;
+import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.User;
-import com.dwalldorf.owbackend.repository.OverwatchVerdictRepository;
+import com.dwalldorf.owbackend.service.OverwatchVerdictService;
 import com.dwalldorf.owbackend.service.UserService;
 import com.dwalldorf.owbackend.stub.OverwatchVerdictStub;
 import com.dwalldorf.owbackend.stub.UserStub;
@@ -30,7 +30,7 @@ public class TestDataController {
 
     private final OverwatchVerdictStub verdictStub;
 
-    private final OverwatchVerdictRepository verdictRepository;
+    private final OverwatchVerdictService verdictService;
 
     private final RandomUtil randomUtil;
 
@@ -39,12 +39,12 @@ public class TestDataController {
             UserService userService,
             UserStub userStub,
             OverwatchVerdictStub verdictStub,
-            OverwatchVerdictRepository verdictRepository,
+            OverwatchVerdictService verdictService,
             RandomUtil randomUtil) {
         this.userService = userService;
         this.userStub = userStub;
         this.verdictStub = verdictStub;
-        this.verdictRepository = verdictRepository;
+        this.verdictService = verdictService;
         this.randomUtil = randomUtil;
     }
 
@@ -52,27 +52,26 @@ public class TestDataController {
     public ResponseEntity<String> createTestUsers(
             @RequestParam("amount") Integer users,
             @RequestParam("verdicts") Integer verdicts
-    ) {
+    ) throws LoginRequiredException {
         if (users <= 0 || users > 10000) {
             return new ResponseEntity<>(users + " is out of bounds", HttpStatus.BAD_REQUEST);
         }
 
         for (int createdUsers = 0; createdUsers < users; createdUsers++) {
             User currentUser = userStub.createUser().setId(null);
-            currentUser.getUserProperties().setPassword(randomUtil.randomString(20));
+            String password = randomUtil.randomString(20);
+            currentUser.getUserProperties().setPassword(password);
 
             currentUser = userService.register(currentUser);
+            userService.login(currentUser.getUserProperties().getUsername(), password);
 
             if (verdicts != null && verdicts > 0) {
                 int verdictsForUser = randomUtil.randomInt(10, verdicts);
                 for (int createdUserVerdicts = 0; createdUserVerdicts < verdictsForUser; createdUserVerdicts++) {
-                    OverwatchVerdict verdict = verdictStub.createVerdict();
-                    verdict.setUserId(currentUser.getId())
-                           .setCreationDate(verdict.getOverwatchDate());
-
-                    verdictRepository.save(verdict);
+                    verdictService.save(verdictStub.createVerdict());
                 }
             }
+            userService.logout();
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);

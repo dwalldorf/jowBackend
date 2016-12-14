@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
+import org.springframework.context.ApplicationEventPublisher;
 
 public class UserServiceTest extends BaseTest {
 
@@ -28,6 +29,9 @@ public class UserServiceTest extends BaseTest {
     private final static String PASSWORD = "notSoSecurePassword123";
     private final static byte[] SALT = "salt".getBytes();
     private final static byte[] HASHED_PASSWORD = "hashedPassword".getBytes();
+
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @Mock
     private UserRepository userRepository;
@@ -42,7 +46,7 @@ public class UserServiceTest extends BaseTest {
 
     @Override
     protected void afterSetup() {
-        this.userService = new UserService(userRepository, httpSession, passwordService);
+        this.userService = new UserService(eventPublisher, userRepository, httpSession, passwordService);
         mockLogger(this.userService);
     }
 

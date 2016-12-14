@@ -1,8 +1,6 @@
 package com.dwalldorf.owbackend.worker;
 
-import static com.dwalldorf.owbackend.Application.appInfoMarker;
-
-import com.dwalldorf.owbackend.annotation.Log;
+import com.dwalldorf.owbackend.event.OverwatchVerdictScoresProcessedEvent;
 import com.dwalldorf.owbackend.model.OverwatchUserScore;
 import com.dwalldorf.owbackend.model.OverwatchUserScore.Period;
 import com.dwalldorf.owbackend.service.OverwatchUserScoreService;
@@ -10,7 +8,7 @@ import com.dwalldorf.owbackend.service.OverwatchVerdictService;
 import com.dwalldorf.owbackend.service.StopWatch;
 import java.util.Optional;
 import javax.inject.Inject;
-import org.slf4j.Logger;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,8 +17,7 @@ import org.springframework.stereotype.Component;
 @Profile("!integration-test")
 public class OverwatchScoreWorker {
 
-    @Log
-    private Logger logger;
+    private final ApplicationEventPublisher eventPublisher;
 
     private final OverwatchUserScoreService scoreService;
 
@@ -29,23 +26,24 @@ public class OverwatchScoreWorker {
     private final StopWatch stopWatch;
 
     @Inject
-    public OverwatchScoreWorker(OverwatchUserScoreService scoreService, OverwatchVerdictService verdictService, StopWatch stopWatch) {
+    public OverwatchScoreWorker(ApplicationEventPublisher eventPublisher, OverwatchUserScoreService scoreService, OverwatchVerdictService verdictService, StopWatch stopWatch) {
+        this.eventPublisher = eventPublisher;
         this.scoreService = scoreService;
         this.verdictService = verdictService;
         this.stopWatch = stopWatch;
     }
 
-    @Scheduled(fixedDelay = (5 * 1000))
+    @Scheduled(fixedDelay = (5 * 1000)) // 5sec
     public void processUserScoresDaily() {
         processUserScores(Period.DAILY);
     }
 
-    @Scheduled(fixedDelay = (30 * 1000))
+    @Scheduled(fixedDelay = (30 * 1000)) // 30sec
     public void processUserScoresWeekly() {
         processUserScores(Period.WEEKLY);
     }
 
-    @Scheduled(fixedDelay = (3600 * 1000))
+    @Scheduled(fixedDelay = (900 * 1000)) // 15min
     public void processUserScoresMonthly() {
         processUserScores(Period.MONTHLY);
     }
@@ -56,9 +54,12 @@ public class OverwatchScoreWorker {
         boolean processScoresFlag = false;
         int processedScores = 0;
 
+        OverwatchVerdictScoresProcessedEvent.Builder eventBuilder = OverwatchVerdictScoresProcessedEvent.builder();
+        eventBuilder.setPeriod(period);
+
         Optional<OverwatchUserScore> latestScore = scoreService.getLatestScoreByPeriod(period);
         if (!latestScore.isPresent()) {
-            logger.info(appInfoMarker, "scores for period {} have never been processed", period.toString());
+            eventBuilder.setIsInitialRun();
             processScoresFlag = true;
         } else {
             if (verdictService.hasVerdictsAfter(latestScore.get().getCalculated())) {
@@ -67,12 +68,13 @@ public class OverwatchScoreWorker {
         }
 
         if (processScoresFlag) {
-            logger.info(appInfoMarker, "(re)processing scores for period {}", period.toString());
-
             processedScores += scoreService.reprocessUserScores(period);
-
             stopWatch.stop();
-            logger.info(appInfoMarker, "Processed {} '{}' scores in {}ms", processedScores, period.toString(), stopWatch.getRuntime());
+
+            eventBuilder.setPeriod(period)
+                        .setRuntime(stopWatch.getRuntime())
+                        .setProcessedScores(processedScores);
+            eventPublisher.publishEvent(eventBuilder.build());
         }
     }
 }
