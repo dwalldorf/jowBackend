@@ -8,6 +8,7 @@ import com.dwalldorf.owbackend.model.internal.PaginationInfo;
 import com.dwalldorf.owbackend.rest.dto.ListDto;
 import com.dwalldorf.owbackend.service.OverwatchUserScoreService;
 import com.dwalldorf.owbackend.service.UserService;
+import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +26,9 @@ public class OverwatchScoreController {
     public static final String URI_SCORES_LOWER = URI_SCORES + "/lower";
     public static final String URI_SCORES_HIGHER = URI_SCORES + "/higher";
 
-    private UserService userService;
+    private final UserService userService;
 
-    private OverwatchUserScoreService scoreService;
+    private final OverwatchUserScoreService scoreService;
 
     @Inject
     public OverwatchScoreController(UserService userService, OverwatchUserScoreService scoreService) {
@@ -35,45 +36,42 @@ public class OverwatchScoreController {
         this.scoreService = scoreService;
     }
 
-    @GetMapping(URI_SCORES + "/{userId}/{periodValue}")
-    public OverwatchUserScore getByUser(
+    @GetMapping(URI_SCORES + "/{userId}")
+    public Serializable getByUser(
             @PathVariable String userId,
-            @PathVariable Integer periodValue) throws NotFoundException {
+            @RequestParam(required = false) Integer period) throws NotFoundException {
 
-        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
-
-        return scoreService.findByUserIdAndPeriod(user, period);
+        if (period != null) {
+            return scoreService.findByUserAndPeriod(user, Period.fromInt(period));
+        }
+        return new ListDto<>(scoreService.findByUser(user));
     }
 
-    @GetMapping(URI_SCORES_HIGHER + "/{userId}/{periodValue}")
+    @GetMapping(URI_SCORES_HIGHER + "/{userId}")
     public ListDto<OverwatchUserScore> getHigherThanUser(
             @PathVariable String userId,
-            @PathVariable Integer periodValue,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
+            @RequestParam Integer period,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer limit) throws NotFoundException {
 
-        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
-
         PaginationInfo paginationInfo = new PaginationInfo(page, limit);
-        List<OverwatchUserScore> scores = scoreService.findByHigherThanUser(user, period, paginationInfo);
+        List<OverwatchUserScore> scores = scoreService.findByHigherThanUser(user, Period.fromInt(period), paginationInfo);
 
         return new ListDto<>(scores);
     }
 
-    @GetMapping(URI_SCORES_LOWER + "/{userId}/{periodValue}")
+    @GetMapping(URI_SCORES_LOWER + "/{userId}")
     public ListDto<OverwatchUserScore> getLowerThanUser(
             @PathVariable String userId,
-            @PathVariable Integer periodValue,
-            @RequestParam(value = "page", required = false) Integer page,
-            @RequestParam(value = "limit", required = false) Integer limit) throws NotFoundException {
+            @RequestParam Integer period,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer limit) throws NotFoundException {
 
-        Period period = Period.fromInt(periodValue);
         User user = getUser(userId);
-
         PaginationInfo paginationInfo = new PaginationInfo(page, limit);
-        List<OverwatchUserScore> scores = scoreService.findByLowerThanUser(user, period, paginationInfo);
+        List<OverwatchUserScore> scores = scoreService.findByLowerThanUser(user, Period.fromInt(period), paginationInfo);
 
         return new ListDto<>(scores);
     }

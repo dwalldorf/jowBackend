@@ -60,12 +60,16 @@ public class OverwatchUserScoreService {
         this.scoreRepository = scoreRepository;
     }
 
-    public OverwatchUserScore findByUserIdAndPeriod(User userId, Period period) {
-        return scoreRepository.findOneByUserIdAndPeriod(userId.getId(), period.getDays());
+    public List<OverwatchUserScore> findByUser(User user) {
+        return scoreRepository.findByUserId(user.getId());
+    }
+
+    public OverwatchUserScore findByUserAndPeriod(User user, Period period) {
+        return scoreRepository.findOneByUserIdAndPeriod(user.getId(), period.getDays());
     }
 
     public List<OverwatchUserScore> findByHigherThanUser(User user, Period period, PaginationInfo paginationInfo) {
-        OverwatchUserScore score = findByUserIdAndPeriod(user, period);
+        OverwatchUserScore score = findByUserAndPeriod(user, period);
 
         return scoreRepository.findByPeriodAndPositionGreaterThanOrderByPositionAsc(
                 period.getDays(),
@@ -75,7 +79,7 @@ public class OverwatchUserScoreService {
     }
 
     public List<OverwatchUserScore> findByLowerThanUser(User userId, Period period, PaginationInfo paginationInfo) {
-        OverwatchUserScore score = findByUserIdAndPeriod(userId, period);
+        OverwatchUserScore score = findByUserAndPeriod(userId, period);
         return scoreRepository.findByPeriodAndPositionLessThanOrderByPositionAsc(
                 period.getDays(),
                 score.getPosition(),
