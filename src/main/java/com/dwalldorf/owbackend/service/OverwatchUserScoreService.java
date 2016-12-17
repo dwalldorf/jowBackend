@@ -150,7 +150,6 @@ public class OverwatchUserScoreService {
                 position++;
             }
         } catch (MongoCommandException ex) {
-            logger.error(ex.getMessage());
         }
 
         return retVal;

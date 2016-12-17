@@ -1,6 +1,5 @@
 package com.dwalldorf.owbackend.service;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
@@ -47,23 +46,6 @@ public class UserServiceTest extends BaseTest {
     @Override
     protected void afterSetup() {
         this.userService = new UserService(eventPublisher, userRepository, httpSession, passwordService);
-        mockLogger(this.userService);
-    }
-
-    @Test
-    public void testGetSecureUserCopy() {
-        User user = createUser();
-
-        User secureUserCopy = userService.getSecureUserCopy(user);
-
-        assertEquals(ID, secureUserCopy.getId());
-        assertEquals(USERNAME, secureUserCopy.getUserProperties().getUsername());
-        assertEquals(EMAIL, secureUserCopy.getUserProperties().getEmail());
-        assertEquals(REGISTRATION, secureUserCopy.getUserProperties().getRegistration());
-
-        assertNull(secureUserCopy.getUserProperties().getPassword());
-        assertNull(secureUserCopy.getUserProperties().getSalt());
-        assertNull(secureUserCopy.getUserProperties().getHashedPassword());
     }
 
     @Test(expected = InvalidInputException.class)
@@ -110,19 +92,6 @@ public class UserServiceTest extends BaseTest {
 
         Mockito.verify(passwordService).createSalt();
         Mockito.verify(passwordService).hash(any(), eq(SALT));
-    }
-
-    @Test
-    public void testRegister_ReturnSecureUserCopy() {
-        User user = createUser();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(passwordService.createSalt()).thenReturn(SALT);
-
-        User registeredUser = userService.register(user);
-
-        assertNull(registeredUser.getUserProperties().getPassword());
-        assertNull(registeredUser.getUserProperties().getSalt());
-        assertNull(registeredUser.getUserProperties().getHashedPassword());
     }
 
     @Test

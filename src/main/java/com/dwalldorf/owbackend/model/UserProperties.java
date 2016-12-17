@@ -45,7 +45,7 @@ public class UserProperties implements Serializable {
 
     private boolean hasPostedVerdict = false;
 
-    private boolean hasUploadDemo = false;
+    private boolean hasUploadedDemo = false;
 
     public UserProperties() {
         this.userSettings = new UserSettings();
@@ -168,11 +168,11 @@ public class UserProperties implements Serializable {
     }
 
     public boolean hasUploadDemo() {
-        return hasUploadDemo;
+        return hasUploadedDemo;
     }
 
-    public UserProperties setHasUploadDemo(boolean hasUploadDemo) {
-        this.hasUploadDemo = hasUploadDemo;
+    public UserProperties setHasUploadedDemo(boolean hasUploadedDemo) {
+        this.hasUploadedDemo = hasUploadedDemo;
         return this;
     }
 }

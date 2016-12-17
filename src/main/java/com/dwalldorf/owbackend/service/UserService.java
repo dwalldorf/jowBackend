@@ -74,16 +74,17 @@ public class UserService {
             throw new InvalidInputException("username or email already in use");
         }
 
-        properties.setRegistration(new Date())
-                  .setSalt(passwordService.createSalt())
-                  .setHashedPassword(
-                          passwordService.hash(properties.getPassword().toCharArray(), properties.getSalt())
-                  );
+        user.setUserProperties(
+                properties.setRegistration(new Date())
+                          .setSalt(passwordService.createSalt())
+                          .setHashedPassword(
+                                  passwordService.hash(properties.getPassword().toCharArray(), properties.getSalt())
+                          )
+        );
+        user = userRepository.save(user);
 
-        User persistedUser = userRepository.save(user);
-
-        eventPublisher.publishEvent(new UserRegisterEvent(persistedUser));
-        return getSecureUserCopy(persistedUser);
+        eventPublisher.publishEvent(new UserRegisterEvent(user));
+        return user;
     }
 
     public User update(User user) {
@@ -94,17 +95,7 @@ public class UserService {
         return userRepository.findByUserProperties_UsernameOrUserProperties_Email(username, username);
     }
 
-    User getSecureUserCopy(final User user) {
-        user.getUserProperties()
-            .setPassword(null)
-            .setSalt(null)
-            .setHashedPassword(null);
-
-        return user;
-    }
-
     private void initializeUserSession(User user) {
-        user = getSecureUserCopy(user);
         httpSession.setAttribute("user", user);
 
         eventPublisher.publishEvent(new UserLoginEvent(user));

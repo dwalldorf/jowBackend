@@ -1,6 +1,7 @@
 package com.dwalldorf.owbackend.annotation;
 
 import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.event.user.UserLoginEventHandler;
 import com.dwalldorf.owbackend.service.UserService;
 import java.lang.reflect.Field;
 import org.junit.Assert;
@@ -15,13 +16,14 @@ public class LoggerInjectorTest extends BaseTest {
     private LoggerInjector loggerInjector;
 
     @Mock
-    private UserService userService;
+    private UserLoginEventHandler loginEventHandler;
 
     @Test
     public void testCreateLogger_SetsDeclaringClass() throws Exception {
-        loggerInjector.postProcessAfterInitialization(userService, userService.getClass().getSimpleName());
+        Class<? extends UserLoginEventHandler> loginEventHandlerClass = loginEventHandler.getClass();
+        loggerInjector.postProcessAfterInitialization(loginEventHandler, loginEventHandlerClass.getSimpleName());
 
-        Field logger = ReflectionUtils.findField(userService.getClass(), "logger");
+        Field logger = ReflectionUtils.findField(loginEventHandlerClass, "logger");
 
         Assert.assertNotNull(logger);
         Assert.assertEquals(UserService.class, logger.getDeclaringClass());
