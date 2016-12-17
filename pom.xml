@@ -17,17 +17,17 @@
 
         <integration-tests.skip>true</integration-tests.skip>
 
-        <spring-boot.version>1.4.1.RELEASE</spring-boot.version>
+        <spring-boot.version>1.4.2.RELEASE</spring-boot.version>
         <springsession.version>1.2.2.RELEASE</springsession.version>
-        <springredis.version>1.7.4.RELEASE</springredis.version>
+        <springredis.version>1.7.5.RELEASE</springredis.version>
         <jedisclient.version>2.9.0</jedisclient.version>
-        <springrabbit.version>1.6.4.RELEASE</springrabbit.version>
+        <springrabbit.version>1.6.5.RELEASE</springrabbit.version>
 
         <log4j.version>1.2.17</log4j.version>
         <jsonevent-logging.version>1.7</jsonevent-logging.version>
         <logback-elasticsearch-appender.version>1.4</logback-elasticsearch-appender.version>
 
-        <hibernate.version>5.3.0.Final</hibernate.version>
+        <hibernate.version>5.3.4.Final</hibernate.version>
         <morphia.version>1.2.1</morphia.version>
 
         <javax.inject.version>1</javax.inject.version>
@@ -56,24 +56,21 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.4.1.RELEASE</version>
+        <version>1.4.2.RELEASE</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
-            <version>${spring-boot.version}</version>
         </dependency>
         <dependency>
             <groupId>javax.inject</groupId>
@@ -145,11 +142,16 @@
             <version>${morphia.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.15</version>
+        </dependency>
+
         <!-- test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -163,12 +165,6 @@
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>net.minidev</groupId>
-            <artifactId>json-smart</artifactId>
-            <version>${jsonsmart.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

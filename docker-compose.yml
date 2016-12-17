@@ -6,6 +6,9 @@ services:
      - "8080:8080"
      - "8000:8000"
      - "5005:5005"
+    networks:
+      - application
+      - docker_elk
     links:
      - redis
      - mongo
@@ -22,19 +25,33 @@ services:
       - rabbitmq
     depends_on:
       - rabbitmq
+    networks:
+      - application
     volumes:
           - demofile-data:/usr/local/ow-backend/data
+  lb:
+    image: dockercloud/haproxy
+    links:
+      - java
+    ports:
+      - 80:80
+    networks:
+      - application
 
   redis:
     build:  src/main/resources/docker/redis
     ports:
       - "6379:6379"
+    networks:
+      - application
     volumes:
       - redis-data:/var/lib/redis
   mongo:
     build: src/main/resources/docker/mongo
     ports:
       - "27017:27017"
+    networks:
+      - application
     volumes:
       - mongo-data:/data/db
   rabbitmq:
@@ -42,6 +59,8 @@ services:
     ports:
       - "5672:5672"
       - "15672:15672"
+    networks:
+      - application
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
 
@@ -74,8 +93,10 @@ services:
     networks:
       - docker_elk
 networks:
-    docker_elk:
-      driver: bridge
+  application:
+    driver: bridge
+  docker_elk:
+    driver: bridge
 
 volumes:
   redis-data: {}

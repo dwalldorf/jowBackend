@@ -1,8 +1,6 @@
 FROM java:8-jdk
 
 EXPOSE 8080
-EXPOSE 8000
-EXPOSE 5005
 
 ENV OW_HOME /usr/local/ow-backend
 

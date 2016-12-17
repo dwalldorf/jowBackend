@@ -9,7 +9,7 @@ build: package
 deploy: package
 	docker-compose stop -t 3 java
 	docker-compose build java
-	docker-compose up -d java
+	docker-compose up -d --no-deps java
 
 run:
 	docker-compose up -d
