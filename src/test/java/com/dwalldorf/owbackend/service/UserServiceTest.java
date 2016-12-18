@@ -8,6 +8,8 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.event.user.UserLogoutEvent;
+import com.dwalldorf.owbackend.event.user.UserRegisterEvent;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
@@ -95,7 +97,13 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testLoginReturnsNullIfUserNotFound() {
+    public void testRegister_PublishedRegisteredEvent() throws Exception {
+        userService.register(createUser());
+        verify(eventPublisher).publishEvent(any(UserRegisterEvent.class));
+    }
+
+    @Test
+    public void testLogin_ReturnsNullIfUserNotFound() {
         when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(null);
         User retVal = userService.login(USERNAME, PASSWORD);
 
@@ -103,11 +111,23 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testLoginReturnsNullIfUserFoundButWrongPassword() {
+    public void testLogin_ReturnsNullIfUserFoundButWrongPassword() {
         when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(createUser());
 
         User retVal = userService.login(USERNAME, "wrongPassword");
         assertNull(retVal);
+    }
+
+    @Test
+    public void testLogout() throws Exception {
+        userService.logout();
+        verify(httpSession).invalidate();
+    }
+
+    @Test
+    public void testLogout_PublishedLogoutEvent() throws Exception {
+        userService.logout();
+        verify(eventPublisher).publishEvent(any(UserLogoutEvent.class));
     }
 
     private User createUser() {

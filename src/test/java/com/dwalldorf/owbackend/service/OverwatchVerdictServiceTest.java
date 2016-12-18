@@ -5,6 +5,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.event.user.UserPostedVerdictEvent;
 import com.dwalldorf.owbackend.exception.LoginRequiredException;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
 import com.dwalldorf.owbackend.model.User;
@@ -38,7 +39,7 @@ public class OverwatchVerdictServiceTest extends BaseTest {
     }
 
     @Test
-    public void saveSetUserId() throws Exception {
+    public void testSave_SetUserId() throws Exception {
         User currentUserMock = userStub.createUser();
 
         when(userService.getCurrentUser()).thenReturn(currentUserMock);
@@ -51,13 +52,13 @@ public class OverwatchVerdictServiceTest extends BaseTest {
     }
 
     @Test(expected = LoginRequiredException.class)
-    public void saveThrowsNotLoggedIn() throws Exception {
+    public void testSave_ThrowsNotLoggedIn() throws Exception {
         when(userService.getCurrentUser()).thenReturn(null);
         verdictService.save(new OverwatchVerdict());
     }
 
     @Test
-    public void saveSetsCreationDate() throws Exception {
+    public void testSave_SetsCreationDate() throws Exception {
         when(userService.getCurrentUser()).thenReturn(userStub.createUser());
         OverwatchVerdict verdictMock = Mockito.mock(OverwatchVerdict.class);
 
@@ -66,11 +67,20 @@ public class OverwatchVerdictServiceTest extends BaseTest {
     }
 
     @Test
-    public void testSave() throws Exception {
+    public void testSave_Success() throws Exception {
         when(userService.getCurrentUser()).thenReturn(userStub.createUser());
         OverwatchVerdict overwatchVerdict = new OverwatchVerdict();
         verdictService.save(overwatchVerdict);
 
         verify(verdictRepository).save(eq(overwatchVerdict));
+    }
+
+    @Test
+    public void testSave_PublishedVerdictPostedEvent() throws Exception {
+        when(userService.getCurrentUser()).thenReturn(userStub.createUser());
+        OverwatchVerdict overwatchVerdict = new OverwatchVerdict();
+        verdictService.save(overwatchVerdict);
+
+        verify(eventPublisher).publishEvent(any(UserPostedVerdictEvent.class));
     }
 }
