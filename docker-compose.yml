@@ -19,6 +19,10 @@ services:
       - mongo
     volumes:
       - demofile-data:/usr/local/ow-backend/data
+  frontend:
+    build: src/main/resources/docker/frontend
+    networks:
+      - application
   demoparser:
     build: src/main/resources/docker/demoparser
     links:
@@ -33,6 +37,7 @@ services:
     image: dockercloud/haproxy
     links:
       - java
+      - frontend
     ports:
       - 80:80
     networks:

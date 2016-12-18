@@ -11,6 +11,11 @@ deploy: package
 	docker-compose build java
 	docker-compose up -d --no-deps java
 
+rebuild-frontend:
+	docker-compose stop -t 3 frontend
+	docker-compose build --no-cache frontend
+	docker-compose up -d frontend
+
 run:
 	docker-compose up -d
 
