@@ -2,7 +2,10 @@ package com.dwalldorf.owbackend.rest.controller;
 
 import com.dwalldorf.owbackend.annotation.RequireLogin;
 import com.dwalldorf.owbackend.model.Demo;
+import com.dwalldorf.owbackend.rest.dto.DemoDto;
 import com.dwalldorf.owbackend.service.CsgoDemosManagerService;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +30,13 @@ public class DemoManagerController {
 
     @PostMapping
     @RequireLogin
-    public ResponseEntity<Demo> postExcel(@RequestParam("file") MultipartFile file) {
-        demosManagerService.processFile(file);
+    public ResponseEntity<List<DemoDto>> postExcel(@RequestParam("files") List<MultipartFile> files) {
+        List<DemoDto> retVal = new ArrayList<>();
+        files.forEach(file -> {
+            Demo demo = demosManagerService.processFile(file);
+            retVal.add(DemoDto.fromEntity(demo));
+        });
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(retVal, HttpStatus.CREATED);
     }
 }

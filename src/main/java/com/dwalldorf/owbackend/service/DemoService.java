@@ -32,4 +32,8 @@ public class DemoService {
 
         return demo;
     }
+
+    public Demo findByMatchId(final String matchId) {
+        return demoRepository.findByMatchInfo_MatchId(matchId);
+    }
 }

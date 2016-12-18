@@ -38,9 +38,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDto> register(@RequestBody UserDto userDto) {
-        User user = UserDto.toUser(userDto);
+        User user = UserDto.fromDto(userDto);
 
-        userDto = UserDto.fromUser(userService.register(user));
+        userDto = UserDto.fromEntity(userService.register(user));
         return new ResponseEntity<>(userDto, HttpStatus.CREATED);
     }
 
@@ -51,13 +51,13 @@ public class UserController {
             throw new InvalidInputException();
         }
 
-        return new ResponseEntity<>(UserDto.fromUser(loginUser), HttpStatus.OK);
+        return new ResponseEntity<>(UserDto.fromEntity(loginUser), HttpStatus.OK);
     }
 
     @GetMapping(URI_ME)
     @RequireLogin
     public UserDto getMe() {
-        return UserDto.fromUser(userService.getCurrentUser());
+        return UserDto.fromEntity(userService.getCurrentUser());
     }
 
     @PostMapping(URI_LOGOUT)
@@ -72,7 +72,7 @@ public class UserController {
     public ListDto<UserDto> getAllUsers() {
         List<UserDto> retVal = new ArrayList<>();
         userService.getUsers()
-                   .forEach(user -> retVal.add(UserDto.fromUser(user)));
+                   .forEach(user -> retVal.add(UserDto.fromEntity(user)));
 
         return new ListDto<>(retVal);
     }

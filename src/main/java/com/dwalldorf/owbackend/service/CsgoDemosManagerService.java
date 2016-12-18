@@ -51,7 +51,8 @@ public class CsgoDemosManagerService {
         this.userService = userService;
     }
 
-    public void processFile(MultipartFile file) throws InvalidInputException {
+    public Demo processFile(MultipartFile file) throws InvalidInputException {
+        Demo demo = null;
         String filename = file.getOriginalFilename();
         if (!filename.endsWith(".xlsx")) {
             throw new InvalidInputException("Unsupported file: " + filename);
@@ -61,15 +62,24 @@ public class CsgoDemosManagerService {
             InputStream inputStream = file.getInputStream();
             XSSFWorkbook sheets = new XSSFWorkbook(inputStream);
 
-            Demo demo = new Demo()
-                    .setUserId(userService.getCurrentUser().getId())
-                    .setAnalyzed(true)
-                    .setMatchInfo(getMatchInfo(sheets));
+            demo = demoService.findByMatchId(getMatchId(sheets));
+            if (demo == null) {
+                demo = new Demo()
+                        .setUserId(userService.getCurrentUser().getId())
+                        .setAnalyzed(true);
+            }
+            demo.setMatchInfo(getMatchInfo(sheets));
 
-            demoService.save(demo);
+            demo = demoService.save(demo);
         } catch (IOException e) {
             logger.warn(appInfoMarker, e.getMessage(), e);
         }
+        return demo;
+    }
+
+    private String getMatchId(XSSFWorkbook sheets) {
+        XSSFSheet demoSheet = sheets.getSheetAt(0);
+        return excelService.stringFromCell(demoSheet.getRow(1), 1);
     }
 
     private DemoMatchInfo getMatchInfo(XSSFWorkbook sheets) throws IOException {
@@ -81,8 +91,10 @@ public class CsgoDemosManagerService {
         }
 
         XSSFRow demoRow = demoSheet.getRow(1);
-        DemoMatchInfo matchInfo = new DemoMatchInfo()
-                .setMatchId(excelService.stringFromCell(demoRow, 1))
+        Map<Integer, DemoTeam> teams = getTeams(playerSheet);
+
+        return new DemoMatchInfo()
+                .setMatchId(getMatchId(sheets))
                 .setDate(excelService.dateFromCell(demoRow, 2))
                 .setServerName(excelService.stringFromCell(demoRow, 6))
                 .setTickRate(excelService.intFromCell(demoRow, 8))
@@ -93,13 +105,14 @@ public class CsgoDemosManagerService {
                 .setScoreTeam2(excelService.intFromCell(demoRow, 15))
                 .setScoreHalftimeTeam1(excelService.intFromCell(demoRow, 16))
                 .setScoreHalftimeTeam2(excelService.intFromCell(demoRow, 17))
-                .setRounds(getRounds(sheets));
-        matchInfo = setTeams(matchInfo, playerSheet);
-
-        return matchInfo;
+                .setRounds(getRounds(sheets))
+                .setTeam1(teams.get(1))
+                .setTeam2(teams.get(2));
     }
 
-    private DemoMatchInfo setTeams(DemoMatchInfo matchInfo, XSSFSheet playerSheet) {
+    private Map<Integer, DemoTeam> getTeams(XSSFSheet playerSheet) {
+        Map<Integer, DemoTeam> retVal = new HashMap<>();
+
         DemoTeam team1 = new DemoTeam().setTeamNumber(1);
         DemoTeam team2 = new DemoTeam().setTeamNumber(2);
 
@@ -139,10 +152,10 @@ public class CsgoDemosManagerService {
                 team2.addPlayer(player);
             }
         });
-        matchInfo.setTeam1(team1)
-                 .setTeam2(team2);
 
-        return matchInfo;
+        retVal.put(1, team1);
+        retVal.put(2, team2);
+        return retVal;
     }
 
     private List<DemoRound> getRounds(XSSFWorkbook sheets) {
