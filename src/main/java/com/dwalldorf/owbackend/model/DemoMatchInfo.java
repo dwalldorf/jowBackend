@@ -20,7 +20,7 @@ public class DemoMatchInfo implements Serializable {
 
     private Date date;
 
-    private long duration;
+    private Long duration;
 
     @Embedded
     private DemoTeam team1;
@@ -98,11 +98,11 @@ public class DemoMatchInfo implements Serializable {
         return this;
     }
 
-    public long getDuration() {
+    public Long getDuration() {
         return duration;
     }
 
-    public DemoMatchInfo setDuration(long duration) {
+    public DemoMatchInfo setDuration(Long duration) {
         this.duration = duration;
         return this;
     }

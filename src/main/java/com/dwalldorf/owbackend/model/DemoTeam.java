@@ -45,10 +45,12 @@ public class DemoTeam implements Serializable {
         return this;
     }
 
-    public void addPlayer(DemoPlayer player) {
+    public DemoTeam addPlayer(DemoPlayer player) {
         if (this.players == null) {
             this.players = new ArrayList<>();
         }
         this.players.add(player);
+
+        return this;
     }
 }

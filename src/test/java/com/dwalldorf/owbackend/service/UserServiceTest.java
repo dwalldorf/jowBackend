@@ -8,6 +8,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.event.user.LoginFailedEvent;
 import com.dwalldorf.owbackend.event.user.UserLogoutEvent;
 import com.dwalldorf.owbackend.event.user.UserRegisterEvent;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
@@ -97,7 +98,7 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testRegister_PublishedRegisteredEvent() throws Exception {
+    public void testRegister_PublishesRegisteredEvent() throws Exception {
         userService.register(createUser());
         verify(eventPublisher).publishEvent(any(UserRegisterEvent.class));
     }
@@ -119,13 +120,19 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
+    public void testLogin_PublishedLoginFailedEvent() throws Exception {
+        userService.login("someName", "somePassword");
+        verify(eventPublisher).publishEvent(any(LoginFailedEvent.class));
+    }
+
+    @Test
     public void testLogout() throws Exception {
         userService.logout();
         verify(httpSession).invalidate();
     }
 
     @Test
-    public void testLogout_PublishedLogoutEvent() throws Exception {
+    public void testLogout_PublishesLogoutEvent() throws Exception {
         userService.logout();
         verify(eventPublisher).publishEvent(any(UserLogoutEvent.class));
     }

@@ -98,7 +98,7 @@ public class CsgoDemosManagerService {
                 .setDate(excelService.dateFromCell(demoRow, 2))
                 .setServerName(excelService.stringFromCell(demoRow, 6))
                 .setTickRate(excelService.intFromCell(demoRow, 8))
-                .setDuration(excelService.intFromCell(demoRow, 10))
+                .setDuration(excelService.longFromCell(demoRow, 10))
                 .setDemoType(excelService.stringFromCell(demoRow, 3))
                 .setMap(excelService.stringFromCell(demoRow, 5))
                 .setScoreTeam1(excelService.intFromCell(demoRow, 14))

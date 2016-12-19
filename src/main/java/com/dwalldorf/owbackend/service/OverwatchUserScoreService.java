@@ -2,7 +2,6 @@ package com.dwalldorf.owbackend.service;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-import com.dwalldorf.owbackend.annotation.Log;
 import com.dwalldorf.owbackend.model.OverwatchUserScore;
 import com.dwalldorf.owbackend.model.OverwatchUserScore.Period;
 import com.dwalldorf.owbackend.model.OverwatchVerdict;
@@ -22,7 +21,6 @@ import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import org.bson.Document;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -31,9 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OverwatchUserScoreService {
-
-    @Log
-    private Logger logger;
 
     private final static String map = "function () {" +
             "    emit(this.userId, 1);" +

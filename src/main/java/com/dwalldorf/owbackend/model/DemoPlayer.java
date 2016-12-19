@@ -47,7 +47,8 @@ public class DemoPlayer implements Serializable {
         return playerStats;
     }
 
-    public void setPlayerStats(DemoPlayerStats playerStats) {
+    public DemoPlayer setPlayerStats(DemoPlayerStats playerStats) {
         this.playerStats = playerStats;
+        return this;
     }
 }

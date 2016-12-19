@@ -14,9 +14,9 @@ public class DemoFile implements Serializable {
 
     private String file;
 
-    private boolean queued = false;
+    private Boolean queued = false;
 
-    private boolean processed = false;
+    private Boolean processed = false;
 
     public String getId() {
         return id;
@@ -45,7 +45,7 @@ public class DemoFile implements Serializable {
         return this;
     }
 
-    public boolean isQueued() {
+    public Boolean isQueued() {
         return queued;
     }
 
@@ -54,12 +54,12 @@ public class DemoFile implements Serializable {
         return this;
     }
 
-    public DemoFile setQueued(boolean queued) {
+    public DemoFile setQueued(Boolean queued) {
         this.queued = queued;
         return this;
     }
 
-    public boolean isProcessed() {
+    public Boolean isProcessed() {
         return processed;
     }
 
@@ -68,7 +68,7 @@ public class DemoFile implements Serializable {
         return this;
     }
 
-    public DemoFile setProcessed(boolean processed) {
+    public DemoFile setProcessed(Boolean processed) {
         this.processed = processed;
         return this;
     }
