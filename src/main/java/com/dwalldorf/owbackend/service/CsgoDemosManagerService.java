@@ -14,7 +14,6 @@ import com.dwalldorf.owbackend.model.DemoTeam;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class CsgoDemosManagerService {
-
-    private static final Map<Integer, Map<String, Class>> map = new HashMap<>();
-
-    static {
-        map.put(0, Collections.singletonMap("id", String.class));
-    }
 
     @Log
     private Logger logger;
@@ -54,6 +47,7 @@ public class CsgoDemosManagerService {
     public Demo processFile(MultipartFile file) throws InvalidInputException {
         Demo demo = null;
         String filename = file.getOriginalFilename();
+        String contentType = file.getContentType();
         if (!filename.endsWith(".xlsx")) {
             throw new InvalidInputException("Unsupported file: " + filename);
         }
