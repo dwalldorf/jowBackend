@@ -10,7 +10,7 @@ public class UserSettings implements Serializable {
 
     private List<String> followSteamIds = new ArrayList<>();
 
-    private boolean admin;
+    private Boolean admin;
 
     public List<String> getFollowSteamIds() {
         return followSteamIds;
@@ -21,11 +21,11 @@ public class UserSettings implements Serializable {
         return this;
     }
 
-    public boolean isAdmin() {
+    public Boolean isAdmin() {
         return admin;
     }
 
-    public UserSettings setIsAdmin(boolean isAdmin) {
+    public UserSettings setIsAdmin(Boolean isAdmin) {
         this.admin = isAdmin;
         return this;
     }

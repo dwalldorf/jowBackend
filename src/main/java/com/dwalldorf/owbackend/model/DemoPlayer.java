@@ -14,6 +14,8 @@ public class DemoPlayer implements Serializable {
 
     private String name;
 
+    private DemoPlayerStats playerStats;
+
     public String getSteamId() {
         return steamId;
     }
@@ -38,6 +40,15 @@ public class DemoPlayer implements Serializable {
 
     public DemoPlayer setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public DemoPlayerStats getPlayerStats() {
+        return playerStats;
+    }
+
+    public DemoPlayer setPlayerStats(DemoPlayerStats playerStats) {
+        this.playerStats = playerStats;
         return this;
     }
 }

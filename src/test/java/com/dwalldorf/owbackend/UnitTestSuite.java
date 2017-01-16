@@ -9,9 +9,13 @@ import com.dwalldorf.owbackend.rest.controller.DemoFileControllerTest;
 import com.dwalldorf.owbackend.rest.controller.OverwatchScoreControllerTest;
 import com.dwalldorf.owbackend.rest.controller.OverwatchVerdictControllerTest;
 import com.dwalldorf.owbackend.rest.controller.UserControllerTest;
+import com.dwalldorf.owbackend.rest.dto.DemoDtoTest;
+import com.dwalldorf.owbackend.rest.dto.DemoMatchInfoDtoTest;
 import com.dwalldorf.owbackend.rest.dto.ListDtoTest;
 import com.dwalldorf.owbackend.rest.dto.UserDtoTest;
+import com.dwalldorf.owbackend.service.CsgoDemosManagerServiceTest;
 import com.dwalldorf.owbackend.service.DemoFileServiceTest;
+import com.dwalldorf.owbackend.service.DemoServiceTest;
 import com.dwalldorf.owbackend.service.OverwatchUserScoreServiceTest;
 import com.dwalldorf.owbackend.service.OverwatchVerdictServiceTest;
 import com.dwalldorf.owbackend.service.PasswordServiceTest;
@@ -35,10 +39,14 @@ import org.junit.runners.Suite;
         OverwatchVerdictControllerTest.class,
         UserControllerTest.class,
 
+        DemoDtoTest.class,
+        DemoMatchInfoDtoTest.class,
         ListDtoTest.class,
         UserDtoTest.class,
 
+        CsgoDemosManagerServiceTest.class,
         DemoFileServiceTest.class,
+        DemoServiceTest.class,
         OverwatchScoreControllerTest.class,
         OverwatchUserScoreServiceTest.class,
         OverwatchVerdictServiceTest.class,

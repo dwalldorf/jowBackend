@@ -1,19 +1,26 @@
 package com.dwalldorf.owbackend.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import org.mongodb.morphia.annotations.Embedded;
 
 @Embedded
 public class DemoMatchInfo implements Serializable {
 
+    private String matchId;
+
     private CSGOMap map;
 
     private String serverName;
 
+    private String demoType;
+
     private Integer tickRate;
 
-    private long duration;
+    private Date date;
+
+    private Long duration;
 
     @Embedded
     private DemoTeam team1;
@@ -22,10 +29,24 @@ public class DemoMatchInfo implements Serializable {
     private DemoTeam team2;
 
     @Embedded
-    private List<DemoPlayer> players;
-
-    @Embedded
     private List<DemoRound> rounds;
+
+    private Integer scoreHalftimeTeam1;
+
+    private Integer scoreHalftimeTeam2;
+
+    private Integer scoreTeam1;
+
+    private Integer scoreTeam2;
+
+    public String getMatchId() {
+        return matchId;
+    }
+
+    public DemoMatchInfo setMatchId(String matchId) {
+        this.matchId = matchId;
+        return this;
+    }
 
     public CSGOMap getMap() {
         return map;
@@ -50,6 +71,15 @@ public class DemoMatchInfo implements Serializable {
         return this;
     }
 
+    public String getDemoType() {
+        return demoType;
+    }
+
+    public DemoMatchInfo setDemoType(String demoType) {
+        this.demoType = demoType;
+        return this;
+    }
+
     public Integer getTickRate() {
         return tickRate;
     }
@@ -59,11 +89,20 @@ public class DemoMatchInfo implements Serializable {
         return this;
     }
 
-    public long getDuration() {
+    public Date getDate() {
+        return date;
+    }
+
+    public DemoMatchInfo setDate(Date date) {
+        this.date = date;
+        return this;
+    }
+
+    public Long getDuration() {
         return duration;
     }
 
-    public DemoMatchInfo setDuration(long duration) {
+    public DemoMatchInfo setDuration(Long duration) {
         this.duration = duration;
         return this;
     }
@@ -86,21 +125,48 @@ public class DemoMatchInfo implements Serializable {
         return this;
     }
 
-    public List<DemoPlayer> getPlayers() {
-        return players;
-    }
-
-    public DemoMatchInfo setPlayers(List<DemoPlayer> players) {
-        this.players = players;
-        return this;
-    }
-
     public List<DemoRound> getRounds() {
         return rounds;
     }
 
     public DemoMatchInfo setRounds(List<DemoRound> rounds) {
         this.rounds = rounds;
+        return this;
+    }
+
+    public Integer getScoreHalftimeTeam1() {
+        return scoreHalftimeTeam1;
+    }
+
+    public DemoMatchInfo setScoreHalftimeTeam1(Integer scoreHalftimeTeam1) {
+        this.scoreHalftimeTeam1 = scoreHalftimeTeam1;
+        return this;
+    }
+
+    public Integer getScoreHalftimeTeam2() {
+        return scoreHalftimeTeam2;
+    }
+
+    public DemoMatchInfo setScoreHalftimeTeam2(Integer scoreHalftimeTeam2) {
+        this.scoreHalftimeTeam2 = scoreHalftimeTeam2;
+        return this;
+    }
+
+    public Integer getScoreTeam1() {
+        return scoreTeam1;
+    }
+
+    public DemoMatchInfo setScoreTeam1(Integer scoreTeam1) {
+        this.scoreTeam1 = scoreTeam1;
+        return this;
+    }
+
+    public Integer getScoreTeam2() {
+        return scoreTeam2;
+    }
+
+    public DemoMatchInfo setScoreTeam2(Integer scoreTeam2) {
+        this.scoreTeam2 = scoreTeam2;
         return this;
     }
 }

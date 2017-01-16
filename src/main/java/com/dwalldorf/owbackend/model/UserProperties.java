@@ -38,32 +38,17 @@ public class UserProperties implements Serializable {
 
     private Date lastLogin;
 
-    private boolean confirmedEmail = false;
+    private Boolean confirmedEmail = false;
 
     @Reference
     private UserSettings userSettings;
 
-    private boolean hasPostedVerdict = false;
+    private Boolean hasPostedVerdict = false;
 
-    private boolean hasUploadDemo = false;
+    private Boolean hasUploadedDemo = false;
 
     public UserProperties() {
         this.userSettings = new UserSettings();
-    }
-
-    public UserProperties(String username, String email, String password, byte[] hashedPassword, byte[] salt, Date registration, UserSettings userSettings) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.hashedPassword = hashedPassword;
-        this.salt = salt;
-        this.registration = registration;
-
-        if (userSettings == null) {
-            this.userSettings = new UserSettings();
-        } else {
-            this.userSettings = userSettings;
-        }
     }
 
     public String getUsername() {
@@ -124,23 +109,25 @@ public class UserProperties implements Serializable {
         return firstLogin;
     }
 
-    public void setFirstLogin(Date firstLogin) {
+    public UserProperties setFirstLogin(Date firstLogin) {
         this.firstLogin = firstLogin;
+        return this;
     }
 
     public Date getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public UserProperties setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+        return this;
     }
 
-    public boolean isConfirmedEmail() {
+    public Boolean isConfirmedEmail() {
         return confirmedEmail;
     }
 
-    public UserProperties setConfirmedEmail(boolean confirmedEmail) {
+    public UserProperties setConfirmedEmail(Boolean confirmedEmail) {
         this.confirmedEmail = confirmedEmail;
         return this;
     }
@@ -154,7 +141,7 @@ public class UserProperties implements Serializable {
         return this;
     }
 
-    public boolean hasPostedVerdict() {
+    public Boolean hasPostedVerdict() {
         return hasPostedVerdict;
     }
 
@@ -162,17 +149,17 @@ public class UserProperties implements Serializable {
         return setHasPostedVerdict(true);
     }
 
-    public UserProperties setHasPostedVerdict(boolean hasPostedVerdict) {
+    public UserProperties setHasPostedVerdict(Boolean hasPostedVerdict) {
         this.hasPostedVerdict = hasPostedVerdict;
         return this;
     }
 
-    public boolean hasUploadDemo() {
-        return hasUploadDemo;
+    public Boolean hasUploadDemo() {
+        return hasUploadedDemo;
     }
 
-    public UserProperties setHasUploadDemo(boolean hasUploadDemo) {
-        this.hasUploadDemo = hasUploadDemo;
+    public UserProperties setHasUploadedDemo(Boolean hasUploadedDemo) {
+        this.hasUploadedDemo = hasUploadedDemo;
         return this;
     }
 }

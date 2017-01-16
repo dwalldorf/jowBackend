@@ -15,7 +15,7 @@ public class Demo implements Serializable {
 
     private String userId;
 
-    private boolean analyzed = false;
+    private Boolean analyzed = false;
 
     @Embedded
     private DemoMatchInfo matchInfo;
@@ -24,31 +24,35 @@ public class Demo implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
+    public Demo setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public Demo setUserId(String userId) {
         this.userId = userId;
+        return this;
     }
 
-    public boolean isAnalyzed() {
+    public Boolean isAnalyzed() {
         return analyzed;
     }
 
-    public void setAnalyzed(boolean analyzed) {
+    public Demo setAnalyzed(Boolean analyzed) {
         this.analyzed = analyzed;
+        return this;
     }
 
     public DemoMatchInfo getMatchInfo() {
         return matchInfo;
     }
 
-    public void setMatchInfo(DemoMatchInfo matchInfo) {
+    public Demo setMatchInfo(DemoMatchInfo matchInfo) {
         this.matchInfo = matchInfo;
+        return this;
     }
 }

@@ -2,6 +2,7 @@ package com.dwalldorf.owbackend.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Reference;
@@ -41,6 +42,15 @@ public class DemoTeam implements Serializable {
 
     public DemoTeam setPlayers(List<DemoPlayer> players) {
         this.players = players;
+        return this;
+    }
+
+    public DemoTeam addPlayer(DemoPlayer player) {
+        if (this.players == null) {
+            this.players = new ArrayList<>();
+        }
+        this.players.add(player);
+
         return this;
     }
 }

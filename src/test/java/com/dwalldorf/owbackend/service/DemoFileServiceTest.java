@@ -32,7 +32,7 @@ public class DemoFileServiceTest extends BaseTest {
     }
 
     @Test
-    public void testSaveSetsUserId() throws Exception {
+    public void testSave_SetsUserId() throws Exception {
         User currentUserMock = userStub.createUser();
         DemoFile demoFileMock = Mockito.mock(DemoFile.class);
 
@@ -45,7 +45,7 @@ public class DemoFileServiceTest extends BaseTest {
     }
 
     @Test(expected = LoginRequiredException.class)
-    public void testSaveThrowsNotLoggedInException() throws Exception {
+    public void testSave_ThrowsNotLoggedInException() throws Exception {
         when(userService.getCurrentUser()).thenReturn(null);
         demoFileService.save(new DemoFile());
     }

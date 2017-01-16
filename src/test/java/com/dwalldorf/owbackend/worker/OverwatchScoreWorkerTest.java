@@ -14,17 +14,15 @@ import com.dwalldorf.owbackend.service.StopWatch;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
+import org.springframework.context.ApplicationEventPublisher;
 
-@Ignore
 public class OverwatchScoreWorkerTest extends BaseTest {
 
-    private final static int PERIODS_COUNT = Period.values().length;
+    @Mock
+    private ApplicationEventPublisher eventPublisher;
 
     @Mock
     private OverwatchUserScoreService scoreService;
@@ -33,22 +31,13 @@ public class OverwatchScoreWorkerTest extends BaseTest {
     private OverwatchVerdictService verdictService;
 
     @Mock
-    private Logger logger;
-
-    @Mock
     private StopWatch stopWatch;
 
-    @InjectMocks
     private OverwatchScoreWorker worker;
 
-    @Test
-    public void testProcessUserScores_FirstRun() throws Exception {
-        when(scoreService.getLatestScoreByPeriod(eq(Period.DAILY))).thenReturn(Optional.empty());
-        worker.processUserScoresDaily();
-
-        verify(scoreService).reprocessUserScores(eq(Period.DAILY));
-        verify(scoreService).reprocessUserScores(eq(Period.WEEKLY));
-        verify(scoreService).reprocessUserScores(eq(Period.MONTHLY));
+    @Override
+    protected void afterSetup() {
+        this.worker = new OverwatchScoreWorker(eventPublisher, scoreService, verdictService, stopWatch);
     }
 
     @Test
@@ -63,7 +52,7 @@ public class OverwatchScoreWorkerTest extends BaseTest {
         worker.processUserScoresDaily();
 
         verify(verdictService).hasVerdictsAfter(eq(latestScoreDate));
-        verify(scoreService, times(PERIODS_COUNT)).reprocessUserScores(any());
+        verify(scoreService).reprocessUserScores(any());
     }
 
     @Test

@@ -34,15 +34,15 @@ public class UserDto implements Serializable {
         this.userSettings = new UserSettings();
     }
 
-    public static UserDto fromUser(User user) {
-        if (user == null) {
+    public static UserDto fromEntity(final User entity) {
+        if (entity == null) {
             return null;
         }
 
-        UserProperties properties = user.getUserProperties();
+        UserProperties properties = entity.getUserProperties();
 
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId())
+        userDto.setId(entity.getId())
                .setUsername(properties.getUsername())
                .setEmail(properties.getEmail())
                .setRegistration(properties.getRegistration())
@@ -52,15 +52,15 @@ public class UserDto implements Serializable {
         return userDto;
     }
 
-    public static User toUser(UserDto userDto) {
-        User user = new User(userDto.getId());
+    public static User fromDto(final UserDto dto) {
+        User user = new User(dto.getId());
         user.getUserProperties()
-            .setUsername(userDto.getUsername())
-            .setEmail(userDto.getEmail())
-            .setPassword(userDto.getPassword())
-            .setRegistration(userDto.getRegistration())
-            .setConfirmedEmail(userDto.isConfirmedEmail())
-            .setUserSettings(userDto.getUserSettings());
+            .setUsername(dto.getUsername())
+            .setEmail(dto.getEmail())
+            .setPassword(dto.getPassword())
+            .setRegistration(dto.getRegistration())
+            .setConfirmedEmail(dto.isConfirmedEmail())
+            .setUserSettings(dto.getUserSettings());
 
         return user;
     }

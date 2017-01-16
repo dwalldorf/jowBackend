@@ -16,35 +16,50 @@ public class DemoRound implements Serializable {
 
     private Integer reason;
 
+    private DemoRoundStats roundStats;
+
     public Integer getNr() {
         return nr;
     }
 
-    public void setNr(Integer nr) {
+    public DemoRound setNr(Integer nr) {
         this.nr = nr;
+        return this;
     }
 
     public Long getDuration() {
         return duration;
     }
 
-    public void setDuration(Long duration) {
+    public DemoRound setDuration(Long duration) {
         this.duration = duration;
+        return this;
     }
 
     public Integer getWinner() {
         return winner;
     }
 
-    public void setWinner(Integer winner) {
+    public DemoRound setWinner(Integer winner) {
         this.winner = winner;
+        return this;
     }
 
     public Integer getReason() {
         return reason;
     }
 
-    public void setReason(Integer reason) {
+    public DemoRound setReason(Integer reason) {
         this.reason = reason;
+        return this;
+    }
+
+    public DemoRoundStats getRoundStats() {
+        return roundStats;
+    }
+
+    public DemoRound setRoundStats(DemoRoundStats roundStats) {
+        this.roundStats = roundStats;
+        return this;
     }
 }

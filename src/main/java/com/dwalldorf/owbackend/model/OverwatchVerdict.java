@@ -19,13 +19,13 @@ public class OverwatchVerdict implements Serializable {
 
     private CSGOMap map;
 
-    private boolean aimAssist = false;
+    private Boolean aimAssist = false;
 
-    private boolean visionAssist = false;
+    private Boolean visionAssist = false;
 
-    private boolean otherAssist = false;
+    private Boolean otherAssist = false;
 
-    private boolean griefing = false;
+    private Boolean griefing = false;
 
     public String getId() {
         return id;
@@ -72,38 +72,38 @@ public class OverwatchVerdict implements Serializable {
         return this;
     }
 
-    public boolean isAimAssist() {
+    public Boolean isAimAssist() {
         return aimAssist;
     }
 
-    public OverwatchVerdict setAimAssist(boolean aimAssist) {
+    public OverwatchVerdict setAimAssist(Boolean aimAssist) {
         this.aimAssist = aimAssist;
         return this;
     }
 
-    public boolean isVisionAssist() {
+    public Boolean isVisionAssist() {
         return visionAssist;
     }
 
-    public OverwatchVerdict setVisionAssist(boolean visionAssist) {
+    public OverwatchVerdict setVisionAssist(Boolean visionAssist) {
         this.visionAssist = visionAssist;
         return this;
     }
 
-    public boolean isOtherAssist() {
+    public Boolean isOtherAssist() {
         return otherAssist;
     }
 
-    public OverwatchVerdict setOtherAssist(boolean otherAssist) {
+    public OverwatchVerdict setOtherAssist(Boolean otherAssist) {
         this.otherAssist = otherAssist;
         return this;
     }
 
-    public boolean isGriefing() {
+    public Boolean isGriefing() {
         return griefing;
     }
 
-    public OverwatchVerdict setGriefing(boolean griefing) {
+    public OverwatchVerdict setGriefing(Boolean griefing) {
         this.griefing = griefing;
         return this;
     }

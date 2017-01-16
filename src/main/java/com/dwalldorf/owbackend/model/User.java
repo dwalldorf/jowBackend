@@ -37,7 +37,8 @@ public class User implements Serializable {
         return userProperties;
     }
 
-    public void setUserProperties(UserProperties userProperties) {
+    public User setUserProperties(UserProperties userProperties) {
         this.userProperties = userProperties;
+        return this;
     }
 }

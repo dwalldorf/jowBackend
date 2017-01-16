@@ -6,5 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface DemoRepository extends MongoRepository<Demo, String> {
 
-    List<Demo> findByUserId(final String userId);
+    List<Demo> findByUserId(String userId);
+
+    Demo findByMatchInfo_MatchId(String matchId);
 }

@@ -11,16 +11,16 @@ import org.mongodb.morphia.annotations.Embedded;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DemoEvent implements Serializable {
 
-    private int eventId;
+    private Integer eventId;
 
     private String name;
 
-    private long timeInRound;
+    private Long timeInRound;
 
     @JsonDeserialize(as = HashMap.class)
     private Map<String, String> data;
 
-    public int getEventId() {
+    public Integer getEventId() {
         return eventId;
     }
 
@@ -38,7 +38,7 @@ public class DemoEvent implements Serializable {
         return this;
     }
 
-    public long getTimeInRound() {
+    public Long getTimeInRound() {
         return timeInRound;
     }
 

@@ -1,6 +1,5 @@
 package com.dwalldorf.owbackend.service;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
@@ -9,6 +8,9 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 import com.dwalldorf.owbackend.BaseTest;
+import com.dwalldorf.owbackend.event.user.LoginFailedEvent;
+import com.dwalldorf.owbackend.event.user.UserLogoutEvent;
+import com.dwalldorf.owbackend.event.user.UserRegisterEvent;
 import com.dwalldorf.owbackend.exception.InvalidInputException;
 import com.dwalldorf.owbackend.model.User;
 import com.dwalldorf.owbackend.repository.UserRepository;
@@ -47,23 +49,6 @@ public class UserServiceTest extends BaseTest {
     @Override
     protected void afterSetup() {
         this.userService = new UserService(eventPublisher, userRepository, httpSession, passwordService);
-        mockLogger(this.userService);
-    }
-
-    @Test
-    public void testGetSecureUserCopy() {
-        User user = createUser();
-
-        User secureUserCopy = userService.getSecureUserCopy(user);
-
-        assertEquals(ID, secureUserCopy.getId());
-        assertEquals(USERNAME, secureUserCopy.getUserProperties().getUsername());
-        assertEquals(EMAIL, secureUserCopy.getUserProperties().getEmail());
-        assertEquals(REGISTRATION, secureUserCopy.getUserProperties().getRegistration());
-
-        assertNull(secureUserCopy.getUserProperties().getPassword());
-        assertNull(secureUserCopy.getUserProperties().getSalt());
-        assertNull(secureUserCopy.getUserProperties().getHashedPassword());
     }
 
     @Test(expected = InvalidInputException.class)
@@ -113,20 +98,13 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testRegister_ReturnSecureUserCopy() {
-        User user = createUser();
-        when(userRepository.save(any(User.class))).thenReturn(user);
-        when(passwordService.createSalt()).thenReturn(SALT);
-
-        User registeredUser = userService.register(user);
-
-        assertNull(registeredUser.getUserProperties().getPassword());
-        assertNull(registeredUser.getUserProperties().getSalt());
-        assertNull(registeredUser.getUserProperties().getHashedPassword());
+    public void testRegister_PublishesRegisteredEvent() throws Exception {
+        userService.register(createUser());
+        verify(eventPublisher).publishEvent(any(UserRegisterEvent.class));
     }
 
     @Test
-    public void testLoginReturnsNullIfUserNotFound() {
+    public void testLogin_ReturnsNullIfUserNotFound() {
         when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(null);
         User retVal = userService.login(USERNAME, PASSWORD);
 
@@ -134,11 +112,29 @@ public class UserServiceTest extends BaseTest {
     }
 
     @Test
-    public void testLoginReturnsNullIfUserFoundButWrongPassword() {
+    public void testLogin_ReturnsNullIfUserFoundButWrongPassword() {
         when(userRepository.findByUserProperties_UsernameOrUserProperties_Email(eq(USERNAME), eq(USERNAME))).thenReturn(createUser());
 
         User retVal = userService.login(USERNAME, "wrongPassword");
         assertNull(retVal);
+    }
+
+    @Test
+    public void testLogin_PublishedLoginFailedEvent() throws Exception {
+        userService.login("someName", "somePassword");
+        verify(eventPublisher).publishEvent(any(LoginFailedEvent.class));
+    }
+
+    @Test
+    public void testLogout() throws Exception {
+        userService.logout();
+        verify(httpSession).invalidate();
+    }
+
+    @Test
+    public void testLogout_PublishesLogoutEvent() throws Exception {
+        userService.logout();
+        verify(eventPublisher).publishEvent(any(UserLogoutEvent.class));
     }
 
     private User createUser() {

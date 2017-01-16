@@ -12,7 +12,7 @@ import org.junit.Test;
 public class UserDtoTest extends BaseTest {
 
     @Test
-    public void fromUser() throws Exception {
+    public void testFromEntity() throws Exception {
         User user = new User("id");
         UserProperties properties = user.getUserProperties();
 
@@ -22,7 +22,7 @@ public class UserDtoTest extends BaseTest {
                   .setRegistration(new Date())
                   .getUserSettings().setIsAdmin(true);
 
-        UserDto userDto = UserDto.fromUser(user);
+        UserDto userDto = UserDto.fromEntity(user);
 
         assertEquals(user.getId(), userDto.getId());
         assertEquals(properties.getUsername(), userDto.getUsername());
@@ -34,7 +34,7 @@ public class UserDtoTest extends BaseTest {
     }
 
     @Test
-    public void toUser() throws Exception {
+    public void testFromDto() throws Exception {
         UserDto userDto = new UserDto();
         userDto.setId("id");
         userDto.setUsername("username")
@@ -43,7 +43,7 @@ public class UserDtoTest extends BaseTest {
                .setRegistration(new Date())
                .getUserSettings().setIsAdmin(true);
 
-        User user = UserDto.toUser(userDto);
+        User user = UserDto.fromDto(userDto);
         UserProperties properties = user.getUserProperties();
 
         assertEquals(userDto.getId(), user.getId());
