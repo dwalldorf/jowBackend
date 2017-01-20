@@ -15,6 +15,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
+        <spring-profile>default</spring-profile>
         <integration-tests.skip>true</integration-tests.skip>
 
         <spring-boot.version>1.4.3.RELEASE</spring-boot.version>
@@ -37,21 +38,6 @@
         <jsonpath.version>2.2.0</jsonpath.version>
         <jsonsmart.version>2.2.1</jsonsmart.version>
     </properties>
-
-    <profiles>
-        <profile>
-            <id>docker-build</id>
-            <build>
-                <finalName>owBackend</finalName>
-            </build>
-        </profile>
-        <profile>
-            <id>integration-test</id>
-            <properties>
-                <integration-tests.skip>false</integration-tests.skip>
-            </properties>
-        </profile>
-    </profiles>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -178,6 +164,21 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring-profile>dev</spring-profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-test</id>
+            <properties>
+                <integration-tests.skip>false</integration-tests.skip>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <resources>
             <resource>
@@ -191,6 +192,11 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <configuration>
+                    <profiles>
+                        <profile>${spring-profile}</profile>
+                    </profiles>
+                </configuration>
             </plugin>
 
             <plugin>
