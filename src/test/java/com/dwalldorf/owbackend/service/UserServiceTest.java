@@ -47,7 +47,6 @@ public class UserServiceTest extends BaseTest {
     @Override
     protected void afterSetup() {
         this.userService = new UserService(eventPublisher, userRepository, httpSession, passwordService);
-        mockLogger(this.userService);
     }
 
     @Test
