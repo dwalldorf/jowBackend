@@ -170,6 +170,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>net.minidev</groupId>
+            <artifactId>json-smart</artifactId>
+            <version>${jsonsmart.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
