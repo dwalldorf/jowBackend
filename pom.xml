@@ -177,6 +177,12 @@
                 <integration-tests.skip>false</integration-tests.skip>
             </properties>
         </profile>
+        <profile>
+            <id>docker-build</id>
+            <build>
+                <finalName>owBackend</finalName>
+            </build>
+        </profile>
     </profiles>
 
     <build>
