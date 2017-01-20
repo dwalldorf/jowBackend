@@ -20,7 +20,7 @@ services:
     volumes:
       - demofile-data:/usr/local/ow-backend/data
   demoparser:
-    build: src/main/resources/docker/demoparser
+    build: docker/demoparser
     links:
       - rabbitmq
     depends_on:
@@ -39,7 +39,7 @@ services:
       - application
 
   redis:
-    build:  src/main/resources/docker/redis
+    build:  docker/redis
     ports:
       - "6379:6379"
     networks:
@@ -47,7 +47,7 @@ services:
     volumes:
       - redis-data:/var/lib/redis
   mongo:
-    build: src/main/resources/docker/mongo
+    build: docker/mongo
     ports:
       - "27017:27017"
     networks:
@@ -55,7 +55,7 @@ services:
     volumes:
       - mongo-data:/data/db
   rabbitmq:
-    build: src/main/resources/docker/rabbitmq
+    build: docker/rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -65,7 +65,7 @@ services:
       - rabbitmq-data:/var/lib/rabbitmq
 
   elasticsearch:
-    build: src/main/resources/docker/elasticsearch/
+    build: docker/elasticsearch/
     ports:
       - "9200:9200"
       - "9300:9300"
@@ -76,7 +76,7 @@ services:
     volumes:
       - elastic-data:/usr/share/elasticsearch/data
   logstash:
-    build: src/main/resources/docker/logstash/
+    build: docker/logstash/
     command: -f /etc/logstash/conf.d/
     volumes:
       - ./logstash/config:/etc/logstash/conf.d
@@ -85,7 +85,7 @@ services:
     networks:
       - docker_elk
   kibana:
-    build: src/main/resources/docker/kibana/
+    build: docker/kibana/
     volumes:
       - ./kibana/config/:/opt/kibana/config/
     ports:
